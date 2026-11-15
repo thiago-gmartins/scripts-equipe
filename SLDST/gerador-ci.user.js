@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SIGEO - Gerador de CI
 // @namespace    sigeo-trt3
-// @version      0.2.9
+// @version      0.3.0
 // @description  Gera a Comunicação Interna da SELD em Word (.docx) já no padrão, reconhecendo o tipo do PROAD e sugerindo os campos a partir dos documentos (decisão, despacho, demonstrativo). Modelos: multa de terceirização (SLDST) e multa de fornecimento/custeio (SLDC).
 // @match        https://proad.trt3.jus.br/proad/pages/fichadoprocesso.xhtml*
 // @require      https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js
