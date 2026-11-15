@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SIGEO - Gerador de CI
 // @namespace    sigeo-trt3
-// @version      0.2.8
+// @version      0.2.9
 // @description  Gera a Comunicação Interna da SELD em Word (.docx) já no padrão, reconhecendo o tipo do PROAD e sugerindo os campos a partir dos documentos (decisão, despacho, demonstrativo). Modelos: multa de terceirização (SLDST) e multa de fornecimento/custeio (SLDC).
 // @match        https://proad.trt3.jus.br/proad/pages/fichadoprocesso.xhtml*
 // @require      https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js
@@ -10,10 +10,39 @@
 // @run-at       document-idle
 // @updateURL    https://raw.githubusercontent.com/thiago-gmartins/scripts-equipe/main/SLDST/gerador-ci.user.js
 // @downloadURL  https://raw.githubusercontent.com/thiago-gmartins/scripts-equipe/main/SLDST/gerador-ci.user.js
+// @grant        GM_xmlhttpRequest
+// @connect      raw.githubusercontent.com
 // ==/UserScript==
 
 (function () {
     'use strict';
+        // ---------- Aviso de nova versão ----------
+    (function verificarAtualizacao() {
+      const url = GM_info.script.downloadURL;
+      if (!url) return;
+      GM_xmlhttpRequest({
+        method: 'GET',
+        url: url + '?t=' + Date.now(),
+        onload: (r) => {
+          const m = r.responseText.match(/@version\s+([\d.]+)/);
+          if (!m) return;
+          const nova = m[1], atual = GM_info.script.version;
+          const maior = (a, b) => {
+            const x = a.split('.').map(Number), y = b.split('.').map(Number);
+            for (let i = 0; i < Math.max(x.length, y.length); i++) {
+              if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0);
+            }
+            return false;
+          };
+          if (!maior(nova, atual)) return;
+          const faixa = document.createElement('div');
+          faixa.innerHTML = `<b>${GM_info.script.name}</b>: nova versão ${nova} disponível (você está na ${atual}). <u>Clique aqui para atualizar.</u>`;
+          faixa.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#d97706;color:#fff;padding:8px 12px;font:14px sans-serif;z-index:999999;cursor:pointer;text-align:center';
+          faixa.onclick = () => window.open(url, '_blank');
+          document.body.appendChild(faixa);
+        }
+      });
+    })();
     const VERSAO = GM_info.script.version;
     // Modelo-base: a CI 366 da SELD sem o corpo (cabeçalho com brasão, margens, estilos e fontes originais).
 
