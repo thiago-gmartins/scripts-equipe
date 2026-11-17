@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         SIGEO - Robô Terceirizados
 // @namespace    http://tampermonkey.net/
-// @version      2.5.37
-// @description  v2.5.37: versão de teste da atualização automática (sem mudanças no robô). v2.5.36: atualização automática pelo GitHub e aviso de nova versão no SIGEO. v2.5.35: retira apenas o botão Prev./FGTS da barra de ações do SIGEO; módulo previdenciário preservado, com acesso pelo menu do Tampermonkey e pelos PDFs locais. v2.5.34: folha Pessoal+ separa o demonstrativo mensal do adiantamento de férias pelo mesmo CPF e matrícula; resumos do departamento não entram nos valores individuais; soma bases e rubricas mensais repetidas; afastamentos com FGTS zero impresso têm justificativa documental, mantendo bases de INSS ausentes como pendência; observação do DARF distingue compensação de pagamento. v2.5.33: comprovante de DARF em que o banco não escreve "DARF" nem "Receita Federal" (ex.: Banco do Brasil, "Comprovante de pagamento de Inst. Nacional de Seguro Social") passa a ser reconhecido pela linha digitável da Receita Federal (código de barras de arrecadação com 0385) e vinculado ao DARF pelo número do documento que o código de barras contém; "Data de pagamento" lida como data do pagamento. v2.5.32: Relatório da Declaração Completa da DCTFWeb lido por OCR — as linhas "Número do Processo|… Tipo|DComp Valor|…" e "Descrição|…" (barras e letras trocadas pelo OCR) voltam a ser reconhecidas; sem isso a compensação ficava "sem nº da DComp" e a PER/DCOMP era tratada como posterior, comparada com saldo zero. CPRB (códigos 2985 e 2991) passa a contar no grupo CP Patronal, como no total do recibo da DCTFWeb. v2.5.31: comprovante lido por OCR com o "R$" trocado por "RS", "R5", "R§" ou "R $" (ex.: Pix do Sicoob) volta a ter o valor reconhecido — no DARF, o pagamento passa a ser vinculado pelo número do documento no identificador do Pix; na GFD, a observação traz valor, data, pagador e recebedor; data do Pix ("Transferido em") lida no comprovante do DARF; CPF da SEGEST com dígito verificador inválido é apontado, e o CPF provável dos documentos entra na observação do FGTS3. v2.5.30: consolida a base anexada (macro v2.0.2, períodos/aditivos) com a conciliação correta de PER/DCOMP posterior. Inclui pastas e subpastas, botão Juntar pasta e PDFs individuais do INSS identificados pela matrícula/nome do arquivo, validados com a folha; acumula todos os empregados e mantém a origem da identificação, sem associação por valores. v2.5.29: integração com macro v2.0.2 — envia metadados opcionais dos períodos para a conferência de Valor a Pagar, sem mudar as posições dos campos anteriores. v2.5.28: SEGEST com períodos e termos aditivos distintos na mesma aba; reconhece os cabeçalhos mesclados, soma dias e glosas, calcula o valor mensal equivalente ponderado e mantém uma linha por trabalhador. Preserva o Valor Total original, registra a composição nas Observações e mantém as validações para duplicações ambíguas. Base desta atualização: v2.5.26 anexada. v2.5.26: leitura mais robusta para qualquer empresa — antes do OCR, as linhas das tabelas são apagadas da imagem (bordas viravam "|", "/" e embaralhavam colunas); a orientação da página é escolhida pela confiança do OCR, não pelo tamanho do texto; página com texto embaralhado (sem nenhuma palavra de verdade) vai ao OCR; sobras de borda entre valores são ignoradas; o OCR guardado das versões anteriores é refeito uma vez. DARF/DCTFWeb: a compensação que a DCTFWeb não mostra sai numa frase só, com todas as DComp. v2.5.25: o robô não bloqueia a cópia; com a competência da planilha da SEGEST diferente da dos documentos, a confirmação de "Copiar para a planilha" abre com um alerta explicando o efeito na macro (aba do mês errado, ninguém na amostra). v2.5.23: checklist do Relatório SLDST editável na tela (FGTS Digital 1 a 5, DARF 1 a 3, GFD 1 a 4), já preenchido com o resultado do robô e a observação no padrão do relatório; a colagem (formato v5, macro mConferenciaPrev v3.0.0) leva o que estiver na tela, a quantidade da amostragem (20% da SEGEST, editável) e todos os terceirizados; a macro escolhe a amostra começando por quem ainda não foi conferido no ano. v2.5.22: conferência do DARF, da DCTFWeb e da PER/DCOMP (seção "Análise do DARF e da DCTFWeb" do POP_SLDST_002, itens DARF 1 a 6: dados da contratada, competência, número do recibo, saldo a pagar × DARFs pagos, PER/DCOMP juntada e valores compensados), com observação objetiva e o detalhe na aba DCTFWeb da memória; comprovante de DARF com fonte sem texto vai ao OCR; alerta de competência diferente em destaque; detalhe do FGTS Digital sem "Página X de Y": páginas diferentes com o mesmo tamanho de texto não são mais descartadas como cópia. v2.5.21: telas do portal do eSocial também em PDF com texto (letras separadas pelo navegador, ex. "T otalizador"); comprovante Pix do SISBB (Banco do Brasil); comprovante de vale-alimentação não é mais pré-marcado como FGTS. v2.5.20: lê o S-5001 impresso das telas do portal do eSocial ("Consulta Totalizador da Contribuição Previdenciária"); avisos de OCR e de consignado viram informação, não "Atenção". v2.5.19: leitura por OCR não gera mais pendência nem "Verificar" — só a observação de quais documentos foram lidos por OCR; página com texto ilegível (fonte sem mapeamento) vai ao OCR; comprovante do Banco do Brasil com letras espaçadas; vínculo do comprovante sem vencimento pelo pagamento dentro do prazo da guia. v2.5.18: valor lido por OCR que bate exatamente com documento digital (guia do FGTS, S-5001) não deixa o item pendente; fica registrado como lido por OCR e confirmado. Pendência de OCR passa a dizer quem e em que página. v2.5.17: pendências de OCR por fonte utilizada; comprovante Sicoob; rubricas e orientação do OCR; parcelas e totais rescisórios; conflitos de identificação e diagnóstico de leitura. Preserva notas, retenções, SEGEST, CSV, macro e formato PREVFGTS v4.
+// @version      2.5.38
+// @description  v2.5.38: confere separadamente a UF do local da prestação e do município de incidência do ISSQN; esperado MG, com alerta de UF diferente ou não identificada, inclusive no DANFSe v2. Preserva a macro e as demais conferências. v2.5.37: versão de teste da atualização automática (sem mudanças no robô). v2.5.36: atualização automática pelo GitHub e aviso de nova versão no SIGEO. v2.5.35: retira apenas o botão Prev./FGTS da barra de ações do SIGEO; módulo previdenciário preservado, com acesso pelo menu do Tampermonkey e pelos PDFs locais. v2.5.34: folha Pessoal+ separa o demonstrativo mensal do adiantamento de férias pelo mesmo CPF e matrícula; resumos do departamento não entram nos valores individuais; soma bases e rubricas mensais repetidas; afastamentos com FGTS zero impresso têm justificativa documental, mantendo bases de INSS ausentes como pendência; observação do DARF distingue compensação de pagamento. v2.5.33: comprovante de DARF em que o banco não escreve "DARF" nem "Receita Federal" (ex.: Banco do Brasil, "Comprovante de pagamento de Inst. Nacional de Seguro Social") passa a ser reconhecido pela linha digitável da Receita Federal (código de barras de arrecadação com 0385) e vinculado ao DARF pelo número do documento que o código de barras contém; "Data de pagamento" lida como data do pagamento. v2.5.32: Relatório da Declaração Completa da DCTFWeb lido por OCR — as linhas "Número do Processo|… Tipo|DComp Valor|…" e "Descrição|…" (barras e letras trocadas pelo OCR) voltam a ser reconhecidas; sem isso a compensação ficava "sem nº da DComp" e a PER/DCOMP era tratada como posterior, comparada com saldo zero. CPRB (códigos 2985 e 2991) passa a contar no grupo CP Patronal, como no total do recibo da DCTFWeb. v2.5.31: comprovante lido por OCR com o "R$" trocado por "RS", "R5", "R§" ou "R $" (ex.: Pix do Sicoob) volta a ter o valor reconhecido — no DARF, o pagamento passa a ser vinculado pelo número do documento no identificador do Pix; na GFD, a observação traz valor, data, pagador e recebedor; data do Pix ("Transferido em") lida no comprovante do DARF; CPF da SEGEST com dígito verificador inválido é apontado, e o CPF provável dos documentos entra na observação do FGTS3. v2.5.30: consolida a base anexada (macro v2.0.2, períodos/aditivos) com a conciliação correta de PER/DCOMP posterior. Inclui pastas e subpastas, botão Juntar pasta e PDFs individuais do INSS identificados pela matrícula/nome do arquivo, validados com a folha; acumula todos os empregados e mantém a origem da identificação, sem associação por valores. v2.5.29: integração com macro v2.0.2 — envia metadados opcionais dos períodos para a conferência de Valor a Pagar, sem mudar as posições dos campos anteriores. v2.5.28: SEGEST com períodos e termos aditivos distintos na mesma aba; reconhece os cabeçalhos mesclados, soma dias e glosas, calcula o valor mensal equivalente ponderado e mantém uma linha por trabalhador. Preserva o Valor Total original, registra a composição nas Observações e mantém as validações para duplicações ambíguas. Base desta atualização: v2.5.26 anexada. v2.5.26: leitura mais robusta para qualquer empresa — antes do OCR, as linhas das tabelas são apagadas da imagem (bordas viravam "|", "/" e embaralhavam colunas); a orientação da página é escolhida pela confiança do OCR, não pelo tamanho do texto; página com texto embaralhado (sem nenhuma palavra de verdade) vai ao OCR; sobras de borda entre valores são ignoradas; o OCR guardado das versões anteriores é refeito uma vez. DARF/DCTFWeb: a compensação que a DCTFWeb não mostra sai numa frase só, com todas as DComp. v2.5.25: o robô não bloqueia a cópia; com a competência da planilha da SEGEST diferente da dos documentos, a confirmação de "Copiar para a planilha" abre com um alerta explicando o efeito na macro (aba do mês errado, ninguém na amostra). v2.5.23: checklist do Relatório SLDST editável na tela (FGTS Digital 1 a 5, DARF 1 a 3, GFD 1 a 4), já preenchido com o resultado do robô e a observação no padrão do relatório; a colagem (formato v5, macro mConferenciaPrev v3.0.0) leva o que estiver na tela, a quantidade da amostragem (20% da SEGEST, editável) e todos os terceirizados; a macro escolhe a amostra começando por quem ainda não foi conferido no ano. v2.5.22: conferência do DARF, da DCTFWeb e da PER/DCOMP (seção "Análise do DARF e da DCTFWeb" do POP_SLDST_002, itens DARF 1 a 6: dados da contratada, competência, número do recibo, saldo a pagar × DARFs pagos, PER/DCOMP juntada e valores compensados), com observação objetiva e o detalhe na aba DCTFWeb da memória; comprovante de DARF com fonte sem texto vai ao OCR; alerta de competência diferente em destaque; detalhe do FGTS Digital sem "Página X de Y": páginas diferentes com o mesmo tamanho de texto não são mais descartadas como cópia. v2.5.21: telas do portal do eSocial também em PDF com texto (letras separadas pelo navegador, ex. "T otalizador"); comprovante Pix do SISBB (Banco do Brasil); comprovante de vale-alimentação não é mais pré-marcado como FGTS. v2.5.20: lê o S-5001 impresso das telas do portal do eSocial ("Consulta Totalizador da Contribuição Previdenciária"); avisos de OCR e de consignado viram informação, não "Atenção". v2.5.19: leitura por OCR não gera mais pendência nem "Verificar" — só a observação de quais documentos foram lidos por OCR; página com texto ilegível (fonte sem mapeamento) vai ao OCR; comprovante do Banco do Brasil com letras espaçadas; vínculo do comprovante sem vencimento pelo pagamento dentro do prazo da guia. v2.5.18: valor lido por OCR que bate exatamente com documento digital (guia do FGTS, S-5001) não deixa o item pendente; fica registrado como lido por OCR e confirmado. Pendência de OCR passa a dizer quem e em que página. v2.5.17: pendências de OCR por fonte utilizada; comprovante Sicoob; rubricas e orientação do OCR; parcelas e totais rescisórios; conflitos de identificação e diagnóstico de leitura. Preserva notas, retenções, SEGEST, CSV, macro e formato PREVFGTS v4.
 // @match        https://exe.sigeo.jt.jus.br/*
 // @match        https://proad.trt3.jus.br/*
 // @match        file:///*
@@ -901,6 +901,16 @@
 
         const dados = {
             layoutXML: 'nacional',
+            localidadesUFNota: {
+                prestacao: {
+                    texto: textoEl(primeiroFilho(infNFSe, 'xLocPrestacao')),
+                    codigoIBGE: textoEl(primeiroFilho(locPrest, 'cLocPrestacao')),
+                },
+                incidencia: {
+                    texto: textoEl(primeiroFilho(infNFSe, 'xLocIncid')),
+                    codigoIBGE: textoEl(primeiroFilho(infNFSe, 'cLocIncid')),
+                },
+            },
             numero: textoEl(primeiroFilho(infNFSe, 'nNFSe')),
             cnpj: textoEl(primeiroFilho(emit, 'CNPJ')),
             razaoSocial: textoEl(primeiroFilho(emit, 'xNome')),
@@ -1021,6 +1031,10 @@
 
         const dados = {
             layoutXML: 'abrasf',
+            localidadesUFNota: {
+                prestacao: { codigoIBGE: textoEl(primeiroFilhoDireto(servico, 'CodigoMunicipio')) },
+                incidencia: { codigoIBGE: textoEl(primeiroFilhoDireto(servico, 'MunicipioIncidencia')) },
+            },
             numero: textoEl(primeiroFilhoDireto(infNfse, 'Numero')) || t(infNfse, 'Numero'),
             cnpj: (t(prestador, 'Cnpj') || t(prestador, 'Cpf') || '').replace(/\D/g, ''),
             razaoSocial: t(prestador, 'RazaoSocial'),
@@ -1099,6 +1113,166 @@
         '31': 'MG', '32': 'ES', '33': 'RJ', '35': 'SP', '41': 'PR', '42': 'SC', '43': 'RS',
         '50': 'MS', '51': 'MT', '52': 'GO', '53': 'DF',
     };
+
+    // v2.5.38: UF da prestação e da incidência do ISSQN são conferidas separadamente.
+    // Nunca usar endereço do prestador/tomador, SEGEST ou incidência de IBS/CBS para
+    // completar esses campos. Um MG no XML também não apaga um MA impresso no PDF.
+    const NOMES_UF_NOTA = {
+        AC: 'Acre', AL: 'Alagoas', AP: 'Amapá', AM: 'Amazonas', BA: 'Bahia', CE: 'Ceará',
+        DF: 'Distrito Federal', ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão',
+        MT: 'Mato Grosso', MS: 'Mato Grosso do Sul', MG: 'Minas Gerais', PA: 'Pará',
+        PB: 'Paraíba', PR: 'Paraná', PE: 'Pernambuco', PI: 'Piauí', RJ: 'Rio de Janeiro',
+        RN: 'Rio Grande do Norte', RS: 'Rio Grande do Sul', RO: 'Rondônia', RR: 'Roraima',
+        SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins',
+    };
+
+    function interpretarLocalidadeUFNota(valor = {}) {
+        const texto = String(valor.texto || '').replace(/\s+/g, ' ').trim();
+        const codigoIBGE = String(valor.codigoIBGE || '').replace(/\D/g, '');
+        const ufCodigo = /^\d{7}$/.test(codigoIBGE) ? (UF_POR_CODIGO_IBGE[codigoIBGE.slice(0, 2)] || '') : '';
+        const par = texto.match(/\s*[/,\u2013\u2014-]\s*([A-Za-z]{2})\b(?=\s*(?:[/;|]|$))/);
+        let uf = String(valor.uf || par?.[1] || '').trim().toUpperCase();
+        let municipio = par ? texto.slice(0, par.index).trim() : texto;
+        if (!uf) {
+            const nome = Object.entries(NOMES_UF_NOTA).find(([, n]) =>
+                normalizarBuscaPDF(texto).endsWith('/ ' + normalizarBuscaPDF(n))
+                || normalizarBuscaPDF(texto).endsWith('-' + normalizarBuscaPDF(n))
+                || normalizarBuscaPDF(texto).endsWith('- ' + normalizarBuscaPDF(n)));
+            if (nome) {
+                uf = nome[0];
+                municipio = texto.slice(0, texto.length - nome[1].length).replace(/\s*[/\u2013\u2014-]\s*$/, '').trim();
+            }
+        }
+        // Um campo contendo só código não deve virar nome de cidade.
+        if (/^[\d.\s-]+$/.test(municipio)) municipio = '';
+        return { texto, municipio, codigoIBGE, uf, ufCodigo };
+    }
+
+    function extrairLocalidadesUFNotaPDF(texto, estrutura = []) {
+        const ehPrestacao = s => /\bLOCAL\s+(?:(?:DA|DE)\s+)?PRESTACAO\b|\bLOCAL\s+DOS\s+SERVICOS\b/.test(s);
+        const ehIncidencia = s => /\bMUNICIPIO\b.{0,100}\bINCIDENCIA\b|\bLOCAL\s+(?:DE\s+)?INCIDENCIA\s+(?:DO\s+)?ISS(?:QN)?\b/.test(s);
+        const ehIBSCBS = s => /\bIBS\b|\bCBS\b/.test(s);
+        const ehLimite = s => /^(?:DESCRICAO\s+DO\s+SERVICO|TRIBUTACAO\s+(?:MUNICIPAL|FEDERAL|IBS)|INFORMACOES\s+COMPLEMENTARES|VALOR\s+TOTAL|BENEFICIO\s+MUNICIPAL|BASE\s+DE\s+CALCULO|BC\s+ISSQN)/.test(s);
+        const limpar = s => String(s || '').replace(/\s+/g, ' ').trim();
+        const resultado = {};
+        const foraDoIBSCBS = linhas => {
+            let emIBSCBS = false;
+            return linhas.map(linha => {
+                const n = normalizarBuscaPDF(linha);
+                if (/^TRIBUTACAO\b/.test(n)) emIBSCBS = ehIBSCBS(n);
+                if (/^(?:VALOR\s+TOTAL|INFORMACOES\s+COMPLEMENTARES)/.test(n)) emIBSCBS = false;
+                return !emIBSCBS;
+            });
+        };
+        const permitirEstrutura = foraDoIBSCBS(estrutura.map(linha => linha.texto));
+
+        // Leitura pela posição real do rótulo: o DANFSe v2 mudou a prestação da
+        // terceira para a quarta coluna. A incidência do ISSQN tem sua própria célula.
+        for (const [campo, ehRotulo] of [['prestacao', ehPrestacao], ['incidencia', ehIncidencia]]) {
+            for (let i = 0; i < estrutura.length; i++) {
+                const linha = estrutura[i];
+                const normal = normalizarBuscaPDF(linha.texto);
+                if (!permitirEstrutura[i] || !ehRotulo(normal) || ehIBSCBS(normal)) continue;
+                const itens = linha.itens || [];
+                let inicio = -1;
+                for (let k = 0; k < itens.length; k++) {
+                    const primeiro = normalizarBuscaPDF(itens[k].texto);
+                    if (campo === 'prestacao' ? !/^LOCAL\b/.test(primeiro)
+                        : !/^MUNICIPIO\b|^LOCAL\s+(?:DE\s+)?INCIDENCIA\b/.test(primeiro)) continue;
+                    const junto = normalizarBuscaPDF(itens.slice(k, k + 8).map(x => x.texto).join(' '));
+                    if (ehRotulo(junto)) { inicio = k; break; }
+                }
+                if (inicio < 0) continue;
+                const item = itens[inicio];
+                const mesmoItem = limpar(item.texto).match(/:\s*(.+)$/);
+                if (mesmoItem && interpretarLocalidadeUFNota({ texto: mesmoItem[1] }).uf) {
+                    resultado[campo] = { texto: mesmoItem[1] };
+                    break;
+                }
+                const direita = itens.slice(inicio + 1).find(x => Number(x.x) > Number(item.x) + 70
+                    && !/^(?:SIGLA\s+UF|UF|PAIS|DE\s+INCIDENCIA|DO\s+ISSQN)\b/.test(normalizarBuscaPDF(x.texto)));
+                for (let j = i + 1; j < Math.min(i + 5, estrutura.length); j++) {
+                    const abaixo = estrutura[j];
+                    if (abaixo.pagina !== linha.pagina || Math.abs(linha.y - abaixo.y) > 34 || ehLimite(normalizarBuscaPDF(abaixo.texto))) break;
+                    const valor = limpar((abaixo.itens || []).filter(x => Number(x.x) >= Number(item.x) - 7
+                        && (!direita || Number(x.x) < Number(direita.x) - 7)).map(x => x.texto).join(' '));
+                    if (!valor || /^(?:SIGLA\s+UF|UF\s*\/|PAIS|DE\s+INCIDENCIA|DO\s+ISSQN)/.test(normalizarBuscaPDF(valor))) continue;
+                    // Mesmo sem UF, guardar apenas o valor desta célula: ausência não é MG.
+                    resultado[campo] = { texto: valor };
+                    break;
+                }
+                if (resultado[campo]) break;
+            }
+        }
+
+        // OCR/sem coordenadas: só o rótulo próprio e sua linha de valores, antes da
+        // próxima seção. Não procurar uma UF solta na descrição ou no quadro IBS/CBS.
+        const linhas = String(texto || '').split(/\r?\n/);
+        const permitirTexto = foraDoIBSCBS(linhas);
+        const pares = valor => Array.from(String(valor).matchAll(/([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ'’. ]{1,90}?)\s*[/\u2013\u2014-]\s*([A-Za-z]{2})\b(?:\s*\/\s*(?:-|BRASIL|BR))?/gi))
+            .map(m => limpar(m[0]).replace(/^(?:OPERACAO\s+TRIBUTAVEL|OPERAÇÃO\s+TRIBUTÁVEL)\s+/i, ''));
+        for (const [campo, ehRotulo] of [['prestacao', ehPrestacao], ['incidencia', ehIncidencia]]) {
+            if (resultado[campo]) continue;
+            for (let i = 0; i < linhas.length; i++) {
+                const normal = normalizarBuscaPDF(linhas[i]);
+                if (!permitirTexto[i] || !ehRotulo(normal) || ehIBSCBS(normal)) continue;
+                const inline = linhas[i].match(/:\s*(.+)$/);
+                const valores = inline ? pares(inline[1]) : [];
+                for (let j = i + 1; !valores.length && j <= Math.min(i + 2, linhas.length - 1); j++) {
+                    if (ehLimite(normalizarBuscaPDF(linhas[j]))) break;
+                    valores.push(...pares(linhas[j]));
+                }
+                if (valores.length) {
+                    resultado[campo] = { texto: campo === 'prestacao' && ehIncidencia(normal) ? valores[0] : valores[valores.length - 1] };
+                    break;
+                }
+            }
+        }
+        return resultado;
+    }
+
+    function conferirUFsNota(d) {
+        const resultado = { erros: [], alertas: [], campos: {} };
+        const fontes = [];
+        if (d?.xml && !d.xmlNumeroDivergente) fontes.push(['XML', d.xml]);
+        const numero = v => String(v || '').replace(/\D/g, '').replace(/^0+/, '');
+        const pdfOutraNota = numero(d?.pdf?.numero) && numero(d?.numero || d?.registro?.numero)
+            && numero(d.pdf.numero) !== numero(d.numero || d.registro?.numero);
+        if (d?.pdf && !pdfOutraNota) fontes.push([d.pdf.extraidoViaOCR ? 'PDF/OCR' : 'PDF', d.pdf]);
+        for (const [campo, rotulo] of [['prestacao', 'Local da prestação'], ['incidencia', 'Município de incidência do ISSQN']]) {
+            const evidencias = fontes.map(([fonte, dados]) => {
+                const valor = dados.localidadesUFNota?.[campo];
+                return valor ? { ...interpretarLocalidadeUFNota(valor), fonte } : null;
+            }).filter(Boolean);
+            const ufs = [...new Set(evidencias.flatMap(e => [e.uf, e.ufCodigo]).filter(Boolean))];
+            const fora = ufs.filter(uf => uf !== 'MG');
+            let status = 'ok', mensagem;
+            if (fora.length) {
+                status = 'diverge';
+                const detalhes = evidencias.map(e => `${e.fonte}: ${e.texto || e.municipio || 'município sem nome'}${e.codigoIBGE ? ` (IBGE ${e.codigoIBGE}${e.ufCodigo ? ' → ' + e.ufCodigo : ''})` : ''}${e.uf && !e.texto ? ' / ' + e.uf : ''}`).join('; ');
+                mensagem = `${rotulo}: UF ${fora.map(uf => NOMES_UF_NOTA[uf] ? `${uf} (${NOMES_UF_NOTA[uf]})` : `${uf} (sigla inválida)`).join(', ')}. Esperado MG (Minas Gerais). ${detalhes}. Confira/corrija a nota fiscal.${ufs.length > 1 ? ' Há divergência de UF entre os dados lidos.' : ''}`;
+                resultado.erros.push(mensagem);
+            } else if (!ufs.length) {
+                status = 'ausente';
+                mensagem = `${rotulo}: UF não identificada na nota (XML/PDF). Conferir manualmente se o município está em Minas Gerais; MG não foi presumido.${pdfOutraNota ? ' O PDF com número diferente não foi usado nesta conferência.' : ''}`;
+                resultado.alertas.push(mensagem);
+            } else {
+                mensagem = `${rotulo}: MG (Minas Gerais) confirmado ${evidencias.filter(e => e.uf || e.ufCodigo).map(e => `no ${e.fonte}${e.codigoIBGE && e.ufCodigo ? ' pelo código IBGE ' + e.codigoIBGE : ''}`).join(' e ')}.`;
+            }
+            resultado.campos[campo] = { rotulo, status, mensagem, evidencias, ufs };
+        }
+        resultado.status = resultado.erros.length ? 'diverge' : resultado.alertas.length ? 'ausente' : 'ok';
+        return resultado;
+    }
+
+    function celulaUFNota(d, campo, rowspan = 1) {
+        const ver = conferirUFsNota(d).campos[campo];
+        const rs = rowspan > 1 ? ` rowspan="${rowspan}"` : '';
+        const cor = ver.status === 'ok' ? CORES.VERDE_CLARO : ver.status === 'diverge' ? CORES.VERMELHO_CLARO : CORES.AMARELO_CLARO;
+        const icone = ver.status === 'ok' ? '✅' : ver.status === 'diverge' ? '⚠️' : 'ℹ️';
+        const valores = [...new Set(ver.evidencias.map(e => e.texto || [e.municipio, e.uf || e.ufCodigo].filter(Boolean).join('/') || (e.codigoIBGE ? `IBGE ${e.codigoIBGE}` : '')).filter(Boolean))];
+        return `<td${rs} class="ter-quebra" style="background:${cor};min-width:150px;max-width:240px;" title="${escaparXml(ver.mensagem)}">${valores.length ? valores.map(escaparXml).join('<br>') : 'Não identificado'}<br><small>${icone} ${ver.status === 'ok' ? 'MG confirmado' : ver.status === 'diverge' ? 'UF diferente de MG' : 'UF não confirmada'}</small></td>`;
+    }
 
     // [v1.4.4] XML municipal do Atende.Net (validado com NFS-e 8655/SURICATE, São José/SC).
     // Estrutura observada:
@@ -2164,6 +2338,14 @@
                 : layout === 'atende-net'
                     ? parsearTextoPDFAtende(textoCompleto)
                     : parsearTextoPDF(textoCompleto, estruturaPDF);
+            dados.localidadesUFNota = extrairLocalidadesUFNotaPDF(textoCompleto, estruturaPDF);
+            // O local do DANFSe v2 pode estar na quarta coluna, sem alterar os
+            // demais campos e cálculos já lidos pelos parsers de cada prefeitura.
+            const localLido = dados.localidadesUFNota.prestacao;
+            if (localLido) {
+                const local = interpretarLocalidadeUFNota(localLido);
+                if (local.municipio && (local.uf || local.ufCodigo)) dados.localPrestacaoServico = local.municipio;
+            }
             dados.extraidoViaOCR = extraidoViaOCR;
             dados.layoutPDF = layout;
             dados.camposExtraidos = contarCamposExtraidos(dados);
@@ -2650,6 +2832,7 @@ ${fonteReferencia}: ${referencia}`;
             documento.dataEmissao = registroSelecionado.dataEmissao;
             documento.valor = registroSelecionado.valor;
             documento.status = documento.fontes.length > 0 ? 'sucesso' : 'parcial';
+            documento.conferenciaUFNota = conferirUFsNota(documento);
         } catch (erro) {
             console.error('[SIGEO-Terceirizados] Erro ao processar linha:', erro);
             documento.numero = registroSelecionado?.numero;
@@ -3922,7 +4105,10 @@ ${fonteReferencia}: ${referencia}`;
 
     function associarNotasSegest(docs, porMunicipio) {
         const somaCent = ls => ls.reduce((s, l) => s + (centavos(l.valorTotal) || 0), 0);
-        const notas = docs.map(d => ({ doc: d, numero: String(d.numero ?? '').trim(), municipio: '', linhas: [], grupos: [], alertas: [], erros: [] }));
+        const notas = docs.map(d => {
+            const uf = d.status === 'erro' ? { erros: [], alertas: [] } : conferirUFsNota(d);
+            return { doc: d, numero: String(d.numero ?? '').trim(), municipio: '', linhas: [], grupos: [], alertas: [...uf.alertas], erros: [...uf.erros] };
+        });
         const candidatas = new Map();
         const selecionadosPorMunicipio = new Map();
         for (const n of notas) {
@@ -4844,6 +5030,12 @@ ${fonteReferencia}: ${referencia}`;
         const erros = [], alertas = [];
         if (erroLoteSigeo) erros.push(erroLoteSigeo);
         erros.push(...conferirNotasRepetidas());
+        // Visível desde a primeira nota, mesmo antes da importação da SEGEST/TRD.
+        for (const d of documentosProcessados.filter(x => x.status !== 'erro')) {
+            const uf = conferirUFsNota(d);
+            erros.push(...uf.erros.map(msg => `NF ${d.numero || '?'}: ${msg}`));
+            alertas.push(...uf.alertas.map(msg => `NF ${d.numero || '?'}: ${msg}`));
+        }
         if (notasForaDoLote.length) alertas.push(`Fora do lote por estarem devolvidas/canceladas no SIGEO: ${notasForaDoLote.map(n => `NF ${n.numero} (${n.situacao}, R$ ${Formatacao.formatarValorBrasileiro(n.valor)})`).join('; ')}.`);
         for (const d of documentosProcessados.filter(x => x.status === 'erro')) erros.push(`NF ${d.numero || '?'}: não processada (${d.erro || 'erro'}).`);
         if (TRD.estado === 'erro') erros.push(`TRD: ${TRD.erro}`);
@@ -4856,7 +5048,7 @@ ${fonteReferencia}: ${referencia}`;
             for (const n of conc.notas) {
                 if (n.doc?.status === 'erro') continue;
                 if (!n.linhas.length) erros.push(`NF ${n.numero}: não foi cruzada com a planilha da SEGEST e NÃO entra na colagem. ${n.erros.join(' ')}`);
-                else if (n.erros.length) erros.push(`NF ${n.numero}: ${n.erros.length} divergência(s) com a SEGEST (veja a linha da nota na tabela).`);
+                else if (n.erros.length) erros.push(`NF ${n.numero}: ${n.erros.length} divergência(s) na conferência (veja a linha da nota na tabela).`);
                 if (n.cc?.status === 'divergente') {
                     const partes = [];
                     if (n.cc.d1) partes.push(`1ª instância ${n.cc.d1 > 0 ? '+' : ''}${fmtCent(n.cc.d1)}`);
@@ -4994,7 +5186,8 @@ ${fonteReferencia}: ${referencia}`;
                 <td><b>${escaparXml(d.numero || '')}</b></td>
                 ${celulaCnpjPrestador(d)}
                 ${celulaMunicipioPrestador(d)}
-                <td>${escaparXml(d.localPrestacaoServico || '')}</td>
+                ${celulaUFNota(d, 'prestacao')}
+                ${celulaUFNota(d, 'incidencia')}
                 <td>${fmtOuVazio(d.valor)}</td>
                 ${celulaTRD(numeroNF(d), info)}
                 <td>${Formatacao.formatarDataBrasileira(d.ateste?.dataAteste || '')}</td>
@@ -5003,7 +5196,7 @@ ${fonteReferencia}: ${referencia}`;
             </tr>`).join('');
         return `<div class="ter-dica">Junte a planilha da SEGEST (etapa 2) para conferir postos, INSS, ISSQN, DIVs e centro de custo e liberar a colagem.</div>
             <div style="overflow-x:auto;"><table class="sigeo-ter-table mat-table" style="width:max-content;border-collapse:collapse;">
-                <thead><tr><th>NF</th><th>CNPJ do prestador</th><th>Município do prestador</th><th>Local da prestação</th><th>Valor</th><th>TRD</th><th>Ateste SIGEO</th><th>1º grau · 2º grau</th><th></th></tr></thead>
+                <thead><tr><th>NF</th><th>CNPJ do prestador</th><th>Município do prestador</th><th>Local da prestação · UF</th><th>Incidência ISSQN · UF</th><th>Valor</th><th>TRD</th><th>Ateste SIGEO</th><th>1º grau · 2º grau</th><th></th></tr></thead>
                 <tbody>${linhas}</tbody></table></div>`;
     }
 
@@ -5022,6 +5215,8 @@ ${fonteReferencia}: ${referencia}`;
                     ${celulaCnpjPrestador(n.doc, span)}
                     ${celulaMunicipioPrestador(n.doc, span)}
                     <td rowspan="${span}">${escaparXml(n.municipio || n.doc?.localPrestacaoServico || '')}</td>
+                    ${celulaUFNota(n.doc, 'prestacao', span)}
+                    ${celulaUFNota(n.doc, 'incidencia', span)}
                     <td rowspan="${span}">${n.linhas.length}</td>
                     ${n.linhas.length ? celulaConfere(n.valorNF, n.somaSegest).replace('<td', `<td rowspan="${span}"`) : `<td rowspan="${span}">${fmtCent(centavos(n.doc?.valor))}</td>`}` : '';
                 const grupoCols = g ? `
@@ -5043,7 +5238,7 @@ ${fonteReferencia}: ${referencia}`;
         return `<div style="overflow-x:auto;">
                 <table class="sigeo-ter-table mat-table" style="width:max-content;border-collapse:collapse;">
                     <thead><tr>
-                        <th>NF</th><th>TRD</th><th>CNPJ do prestador</th><th>Município do prestador</th><th>Local da prestação</th><th>Postos</th><th>Valor NF × SEGEST</th>
+                        <th>NF</th><th>TRD</th><th>CNPJ do prestador</th><th>Município do prestador</th><th>Localidade SEGEST</th><th>Local da prestação · UF</th><th>Incidência ISSQN · UF</th><th>Postos</th><th>Valor NF × SEGEST</th>
                         <th>Serviço (INSS)</th><th>Postos</th><th>Base INSS SIGEO × SEGEST</th><th>Retenção SIGEO</th><th>Ajuste INSS</th>
                         <th>ISSQN nota</th><th>Ajuste ISSQN</th><th>DIVs nota</th><th>Ajuste DIVs</th><th>Centro de custo × ateste</th><th>Situação</th>
                     </tr></thead>
@@ -5069,7 +5264,11 @@ ${fonteReferencia}: ${referencia}`;
         if (conc.linhasSemNota.length) pend.push(`${conc.linhasSemNota.reduce((s, l) => s + l.quantidade, 0)} posto(s) da SEGEST sem nota: ficam fora da colagem. Veja os municípios na conferência.`);
         // v2.3.9: o que da SEGEST não vai para a Liquidação aparece também na hora de copiar
         for (const a of SEGEST.avisosColagem || []) pend.push(`Planilha da SEGEST: ${a}`);
-        if (conc.totalErros > 0) pend.push(`${conc.totalErros} divergência(s) com a SEGEST: as linhas dessas notas vão marcadas como CONFERIR.`);
+        for (const n of conc.notas.filter(n => n.linhas.length)) {
+            const uf = conferirUFsNota(n.doc);
+            pend.push(...[...uf.erros, ...uf.alertas].map(msg => `NF ${n.numero}: ${msg}`));
+        }
+        if (conc.totalErros > 0) pend.push(`${conc.totalErros} divergência(s) na conferência: as linhas dessas notas vão marcadas como CONFERIR.`);
         if (pend.length && !confirm(`Antes de ${formato === 'csv' ? 'baixar o CSV' : 'copiar'}:\n\n• ${pend.join('\n• ')}\n\n${formato === 'csv' ? 'Baixar CSV' : 'Copiar'} mesmo assim?`)) return;
         completarLinhasComTRD(conc, info);
         if (formato === 'csv') {
@@ -5166,7 +5365,8 @@ ${fonteReferencia}: ${referencia}`;
                 <td style="background:${valorValidacao.corStatus}" title="${valorValidacao.mensagem}">${Formatacao.formatarValorBrasileiro(d.valor || 0)} ${valorValidacao.icone}</td>
                 <td style="background:${numeroValidacao.corStatus}" title="${numeroValidacao.mensagem}">${d.numero || ''} ${numeroValidacao.icone}</td>
                 <td style="background:${dataEmissaoValidacao.corStatus}" title="${dataEmissaoValidacao.mensagem}">${Formatacao.formatarDataBrasileira(d.dataEmissao || '')} ${dataEmissaoValidacao.icone}</td>
-                <td>${d.localPrestacaoServico || ''}</td>
+                ${celulaUFNota(d, 'prestacao')}
+                ${celulaUFNota(d, 'incidencia')}
                 <td>${d.codigoTributacaoNacional || ''}</td>
                 <td>${d.codigoTributacaoMunicipal || ''}</td>
                 <td>${fmtOuVazio(d.baseCalculoIssqn)}</td>
@@ -5195,7 +5395,7 @@ ${fonteReferencia}: ${referencia}`;
                                 <th>Tomador</th><th>PROAD</th><th>CNPJ/CPF</th><th>Setor</th><th>Banco</th><th>Agência</th><th>Conta</th>
                                 <th>Nº Contrato</th><th>Tipo de Serviço</th><th>BC INSS</th><th>Retenção INSS</th>${cabecalhosAdicionais}<th>Natureza de Rendimento</th><th>Valor Bruto Nat. Rendimento</th><th>Material</th>
                                 <th>Valor Bruto NF</th><th>Nº NF</th><th>Data Emissão</th>
-                                <th>Local da Prestação</th><th>Cód. Trib. Nacional</th><th>Cód. Trib. Municipal</th><th>BC ISSQN</th><th>Alíquota ISSQN</th><th>ISSQN Retido</th><th>Valor Líquido XML</th>
+                                <th>Local da Prestação · UF</th><th>Incidência ISSQN · UF</th><th>Cód. Trib. Nacional</th><th>Cód. Trib. Municipal</th><th>BC ISSQN</th><th>Alíquota ISSQN</th><th>ISSQN Retido</th><th>Valor Líquido XML</th>
                                 <th>IRRF + Contrib. Sociais</th><th>Data Ateste</th><th>Assinante 1</th><th>Assinante 2</th><th>Valor 1º Grau</th><th>Valor 2º Grau</th>
                                 <th>Glosa</th><th>Observações</th><th>Fonte</th><th>Ações</th>
                             </tr>
