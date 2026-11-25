@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         SIGEO - Robô Terceirizados
 // @namespace    http://tampermonkey.net/
-// @version      2.5.38
-// @description  v2.5.38: confere separadamente a UF do local da prestação e do município de incidência do ISSQN; esperado MG, com alerta de UF diferente ou não identificada, inclusive no DANFSe v2. Preserva a macro e as demais conferências. v2.5.37: versão de teste da atualização automática (sem mudanças no robô). v2.5.36: atualização automática pelo GitHub e aviso de nova versão no SIGEO. v2.5.35: retira apenas o botão Prev./FGTS da barra de ações do SIGEO; módulo previdenciário preservado, com acesso pelo menu do Tampermonkey e pelos PDFs locais. v2.5.34: folha Pessoal+ separa o demonstrativo mensal do adiantamento de férias pelo mesmo CPF e matrícula; resumos do departamento não entram nos valores individuais; soma bases e rubricas mensais repetidas; afastamentos com FGTS zero impresso têm justificativa documental, mantendo bases de INSS ausentes como pendência; observação do DARF distingue compensação de pagamento. v2.5.33: comprovante de DARF em que o banco não escreve "DARF" nem "Receita Federal" (ex.: Banco do Brasil, "Comprovante de pagamento de Inst. Nacional de Seguro Social") passa a ser reconhecido pela linha digitável da Receita Federal (código de barras de arrecadação com 0385) e vinculado ao DARF pelo número do documento que o código de barras contém; "Data de pagamento" lida como data do pagamento. v2.5.32: Relatório da Declaração Completa da DCTFWeb lido por OCR — as linhas "Número do Processo|… Tipo|DComp Valor|…" e "Descrição|…" (barras e letras trocadas pelo OCR) voltam a ser reconhecidas; sem isso a compensação ficava "sem nº da DComp" e a PER/DCOMP era tratada como posterior, comparada com saldo zero. CPRB (códigos 2985 e 2991) passa a contar no grupo CP Patronal, como no total do recibo da DCTFWeb. v2.5.31: comprovante lido por OCR com o "R$" trocado por "RS", "R5", "R§" ou "R $" (ex.: Pix do Sicoob) volta a ter o valor reconhecido — no DARF, o pagamento passa a ser vinculado pelo número do documento no identificador do Pix; na GFD, a observação traz valor, data, pagador e recebedor; data do Pix ("Transferido em") lida no comprovante do DARF; CPF da SEGEST com dígito verificador inválido é apontado, e o CPF provável dos documentos entra na observação do FGTS3. v2.5.30: consolida a base anexada (macro v2.0.2, períodos/aditivos) com a conciliação correta de PER/DCOMP posterior. Inclui pastas e subpastas, botão Juntar pasta e PDFs individuais do INSS identificados pela matrícula/nome do arquivo, validados com a folha; acumula todos os empregados e mantém a origem da identificação, sem associação por valores. v2.5.29: integração com macro v2.0.2 — envia metadados opcionais dos períodos para a conferência de Valor a Pagar, sem mudar as posições dos campos anteriores. v2.5.28: SEGEST com períodos e termos aditivos distintos na mesma aba; reconhece os cabeçalhos mesclados, soma dias e glosas, calcula o valor mensal equivalente ponderado e mantém uma linha por trabalhador. Preserva o Valor Total original, registra a composição nas Observações e mantém as validações para duplicações ambíguas. Base desta atualização: v2.5.26 anexada. v2.5.26: leitura mais robusta para qualquer empresa — antes do OCR, as linhas das tabelas são apagadas da imagem (bordas viravam "|", "/" e embaralhavam colunas); a orientação da página é escolhida pela confiança do OCR, não pelo tamanho do texto; página com texto embaralhado (sem nenhuma palavra de verdade) vai ao OCR; sobras de borda entre valores são ignoradas; o OCR guardado das versões anteriores é refeito uma vez. DARF/DCTFWeb: a compensação que a DCTFWeb não mostra sai numa frase só, com todas as DComp. v2.5.25: o robô não bloqueia a cópia; com a competência da planilha da SEGEST diferente da dos documentos, a confirmação de "Copiar para a planilha" abre com um alerta explicando o efeito na macro (aba do mês errado, ninguém na amostra). v2.5.23: checklist do Relatório SLDST editável na tela (FGTS Digital 1 a 5, DARF 1 a 3, GFD 1 a 4), já preenchido com o resultado do robô e a observação no padrão do relatório; a colagem (formato v5, macro mConferenciaPrev v3.0.0) leva o que estiver na tela, a quantidade da amostragem (20% da SEGEST, editável) e todos os terceirizados; a macro escolhe a amostra começando por quem ainda não foi conferido no ano. v2.5.22: conferência do DARF, da DCTFWeb e da PER/DCOMP (seção "Análise do DARF e da DCTFWeb" do POP_SLDST_002, itens DARF 1 a 6: dados da contratada, competência, número do recibo, saldo a pagar × DARFs pagos, PER/DCOMP juntada e valores compensados), com observação objetiva e o detalhe na aba DCTFWeb da memória; comprovante de DARF com fonte sem texto vai ao OCR; alerta de competência diferente em destaque; detalhe do FGTS Digital sem "Página X de Y": páginas diferentes com o mesmo tamanho de texto não são mais descartadas como cópia. v2.5.21: telas do portal do eSocial também em PDF com texto (letras separadas pelo navegador, ex. "T otalizador"); comprovante Pix do SISBB (Banco do Brasil); comprovante de vale-alimentação não é mais pré-marcado como FGTS. v2.5.20: lê o S-5001 impresso das telas do portal do eSocial ("Consulta Totalizador da Contribuição Previdenciária"); avisos de OCR e de consignado viram informação, não "Atenção". v2.5.19: leitura por OCR não gera mais pendência nem "Verificar" — só a observação de quais documentos foram lidos por OCR; página com texto ilegível (fonte sem mapeamento) vai ao OCR; comprovante do Banco do Brasil com letras espaçadas; vínculo do comprovante sem vencimento pelo pagamento dentro do prazo da guia. v2.5.18: valor lido por OCR que bate exatamente com documento digital (guia do FGTS, S-5001) não deixa o item pendente; fica registrado como lido por OCR e confirmado. Pendência de OCR passa a dizer quem e em que página. v2.5.17: pendências de OCR por fonte utilizada; comprovante Sicoob; rubricas e orientação do OCR; parcelas e totais rescisórios; conflitos de identificação e diagnóstico de leitura. Preserva notas, retenções, SEGEST, CSV, macro e formato PREVFGTS v4.
+// @version      2.5.40
+// @description  v2.5.40: DCTFWeb reconhece recibos com digitos separados pelo OCR; PER/DCOMP de debito unico recupera valores ilegíveis somente com confirmação pelo total do extrato e recibo; preserva a conferência por código e demais módulos. v2.5.39: novo layout de faturamento com Valor Total a Faturar, TR, reembolsos e diárias; valida composição e IMR global sem inventar rateios. Preserva os layouts anteriores. v2.5.38: confere separadamente a UF do local da prestação e do município de incidência do ISSQN; esperado MG, com alerta de UF diferente ou não identificada, inclusive no DANFSe v2. Preserva a macro e as demais conferências. v2.5.37: versão de teste da atualização automática (sem mudanças no robô). v2.5.36: atualização automática pelo GitHub e aviso de nova versão no SIGEO. v2.5.35: retira apenas o botão Prev./FGTS da barra de ações do SIGEO; módulo previdenciário preservado, com acesso pelo menu do Tampermonkey e pelos PDFs locais. v2.5.34: folha Pessoal+ separa o demonstrativo mensal do adiantamento de férias pelo mesmo CPF e matrícula; resumos do departamento não entram nos valores individuais; soma bases e rubricas mensais repetidas; afastamentos com FGTS zero impresso têm justificativa documental, mantendo bases de INSS ausentes como pendência; observação do DARF distingue compensação de pagamento. v2.5.33: comprovante de DARF em que o banco não escreve "DARF" nem "Receita Federal" (ex.: Banco do Brasil, "Comprovante de pagamento de Inst. Nacional de Seguro Social") passa a ser reconhecido pela linha digitável da Receita Federal (código de barras de arrecadação com 0385) e vinculado ao DARF pelo número do documento que o código de barras contém; "Data de pagamento" lida como data do pagamento. v2.5.32: Relatório da Declaração Completa da DCTFWeb lido por OCR — as linhas "Número do Processo|… Tipo|DComp Valor|…" e "Descrição|…" (barras e letras trocadas pelo OCR) voltam a ser reconhecidas; sem isso a compensação ficava "sem nº da DComp" e a PER/DCOMP era tratada como posterior, comparada com saldo zero. CPRB (códigos 2985 e 2991) passa a contar no grupo CP Patronal, como no total do recibo da DCTFWeb. v2.5.31: comprovante lido por OCR com o "R$" trocado por "RS", "R5", "R§" ou "R $" (ex.: Pix do Sicoob) volta a ter o valor reconhecido — no DARF, o pagamento passa a ser vinculado pelo número do documento no identificador do Pix; na GFD, a observação traz valor, data, pagador e recebedor; data do Pix ("Transferido em") lida no comprovante do DARF; CPF da SEGEST com dígito verificador inválido é apontado, e o CPF provável dos documentos entra na observação do FGTS3. v2.5.30: consolida a base anexada (macro v2.0.2, períodos/aditivos) com a conciliação correta de PER/DCOMP posterior. Inclui pastas e subpastas, botão Juntar pasta e PDFs individuais do INSS identificados pela matrícula/nome do arquivo, validados com a folha; acumula todos os empregados e mantém a origem da identificação, sem associação por valores. v2.5.29: integração com macro v2.0.2 — envia metadados opcionais dos períodos para a conferência de Valor a Pagar, sem mudar as posições dos campos anteriores. v2.5.28: SEGEST com períodos e termos aditivos distintos na mesma aba; reconhece os cabeçalhos mesclados, soma dias e glosas, calcula o valor mensal equivalente ponderado e mantém uma linha por trabalhador. Preserva o Valor Total original, registra a composição nas Observações e mantém as validações para duplicações ambíguas. Base desta atualização: v2.5.26 anexada. v2.5.26: leitura mais robusta para qualquer empresa — antes do OCR, as linhas das tabelas são apagadas da imagem (bordas viravam "|", "/" e embaralhavam colunas); a orientação da página é escolhida pela confiança do OCR, não pelo tamanho do texto; página com texto embaralhado (sem nenhuma palavra de verdade) vai ao OCR; sobras de borda entre valores são ignoradas; o OCR guardado das versões anteriores é refeito uma vez. DARF/DCTFWeb: a compensação que a DCTFWeb não mostra sai numa frase só, com todas as DComp. v2.5.25: o robô não bloqueia a cópia; com a competência da planilha da SEGEST diferente da dos documentos, a confirmação de "Copiar para a planilha" abre com um alerta explicando o efeito na macro (aba do mês errado, ninguém na amostra). v2.5.23: checklist do Relatório SLDST editável na tela (FGTS Digital 1 a 5, DARF 1 a 3, GFD 1 a 4), já preenchido com o resultado do robô e a observação no padrão do relatório; a colagem (formato v5, macro mConferenciaPrev v3.0.0) leva o que estiver na tela, a quantidade da amostragem (20% da SEGEST, editável) e todos os terceirizados; a macro escolhe a amostra começando por quem ainda não foi conferido no ano. v2.5.22: conferência do DARF, da DCTFWeb e da PER/DCOMP (seção "Análise do DARF e da DCTFWeb" do POP_SLDST_002, itens DARF 1 a 6: dados da contratada, competência, número do recibo, saldo a pagar × DARFs pagos, PER/DCOMP juntada e valores compensados), com observação objetiva e o detalhe na aba DCTFWeb da memória; comprovante de DARF com fonte sem texto vai ao OCR; alerta de competência diferente em destaque; detalhe do FGTS Digital sem "Página X de Y": páginas diferentes com o mesmo tamanho de texto não são mais descartadas como cópia. v2.5.21: telas do portal do eSocial também em PDF com texto (letras separadas pelo navegador, ex. "T otalizador"); comprovante Pix do SISBB (Banco do Brasil); comprovante de vale-alimentação não é mais pré-marcado como FGTS. v2.5.20: lê o S-5001 impresso das telas do portal do eSocial ("Consulta Totalizador da Contribuição Previdenciária"); avisos de OCR e de consignado viram informação, não "Atenção". v2.5.19: leitura por OCR não gera mais pendência nem "Verificar" — só a observação de quais documentos foram lidos por OCR; página com texto ilegível (fonte sem mapeamento) vai ao OCR; comprovante do Banco do Brasil com letras espaçadas; vínculo do comprovante sem vencimento pelo pagamento dentro do prazo da guia. v2.5.18: valor lido por OCR que bate exatamente com documento digital (guia do FGTS, S-5001) não deixa o item pendente; fica registrado como lido por OCR e confirmado. Pendência de OCR passa a dizer quem e em que página. v2.5.17: pendências de OCR por fonte utilizada; comprovante Sicoob; rubricas e orientação do OCR; parcelas e totais rescisórios; conflitos de identificação e diagnóstico de leitura. Preserva notas, retenções, SEGEST, CSV, macro e formato PREVFGTS v4.
 // @match        https://exe.sigeo.jt.jus.br/*
 // @match        https://proad.trt3.jus.br/*
 // @match        file:///*
@@ -3758,9 +3758,103 @@ ${fonteReferencia}: ${referencia}`;
         return '';
     }
 
+    // v2.5.39: layout de faturamento com subtotal dos postos, reembolsos, diárias e total final.
+    // Só ativa com assinatura estrutural completa; não confunde Valor Total dos Postos com a NF.
+    function lerAbaSegestTotalAFaturar(matriz, nomeAba, mesclagens = []) {
+        const norm = r => (r || []).map(normalizarTextoSegest);
+        const iCab = matriz.slice(0, 40).findIndex(r => {
+            const h = norm(r);
+            return ['CPF', 'TERCEIRIZADO', 'LOCALIDADE', 'VALOR TOTAL DOS POSTOS DE TRABALHO',
+                'VALOR TOTAL A FATURAR', 'REEMBOLSO', 'DIARIAS', 'GLOSA DE BENEFICIOS'].every(t => h.includes(t))
+                && h.some(t => t.startsWith('POSTO DE TRABALHO'));
+        });
+        if (iCab < 0) return null;
+        const h = norm(matriz[iCab]);
+        const erros = [], avisos = [];
+        const falha = msg => ({ aba: nomeAba, linhas: [], erros: [msg] });
+        const cFinal = h.indexOf('VALOR TOTAL A FATURAR'), cPostos = h.indexOf('VALOR TOTAL DOS POSTOS DE TRABALHO');
+        const cPosto = h.findIndex(t => t.startsWith('POSTO DE TRABALHO'));
+        const inicio = matriz.findIndex((r, i) => i > iCab && String(r?.[cPosto] ?? '').trim() && numeroSegest(r?.[cFinal]) !== null);
+        if (inicio < 0) return falha('layout Valor Total a Faturar sem postos com valor numérico');
+        const acharUnico = (rotulo, a, b) => {
+            const hits = [];
+            for (let i = iCab + 1; i < inicio; i++) for (let j = a; j < b; j++) {
+                if (norm(matriz[i])[j] === rotulo) hits.push({ i, j });
+            }
+            if (hits.length !== 1) throw new Error(`layout Valor Total a Faturar: cabeçalho ${rotulo} ausente ou ambíguo na aba "${nomeAba}"`);
+            return hits[0];
+        };
+        const cGlosa = h.indexOf('GLOSA DE BENEFICIOS'), cReemb = h.indexOf('REEMBOLSO'), cDiarias = h.indexOf('DIARIAS');
+        if (!(cGlosa < cPostos && cPostos < cReemb && cReemb < cDiarias && cDiarias < cFinal)) return falha('grupos de glosas, reembolso e diárias em ordem não reconhecida');
+        const tr = acharUnico('TR', cGlosa, cPostos);
+        const vt = acharUnico('VT', cGlosa, cPostos);
+        const cesta = acharUnico('CESTA BASICA', cGlosa, cPostos);
+        const filhos = acharUnico('ASSISTENCIA AOS FILHOS', cReemb, cDiarias);
+        const dependente = acharUnico('AUXILIO AO DEPENDENTE DEFICIENTE', cReemb, cDiarias);
+        const diarias = acharUnico('VALOR DAS DIARIAS', cDiarias, cFinal);
+        // Adaptação dos rótulos em memória apenas; reutiliza a validação padrão.
+        const adaptada = matriz.slice();
+        for (const i of new Set([iCab, tr.i])) adaptada[i] = (matriz[i] || []).slice();
+        adaptada[iCab][cFinal] = 'Valor Total';
+        adaptada[tr.i][tr.j] = 'VA';
+        const aba = lerAbaSegest(adaptada, nomeAba, mesclagens);
+        if (!aba || aba.erros?.length) return aba || falha('não foi possível interpretar o layout adaptado');
+        if (aba.colunas.vt !== vt.j || aba.colunas.va !== tr.j || aba.colunas.cesta !== cesta.j || aba.colunas.valorTotal !== cFinal) return falha('mapeamento ambíguo das glosas ou do total final');
+        const moeda = (r, j, linha, obrigatorio = false) => {
+            const bruto = r[j];
+            if (bruto === null || bruto === undefined || String(bruto).trim() === '' || /^[-–—]$/.test(String(bruto).trim())) {
+                if (obrigatorio) erros.push(`valor monetário ausente na linha ${linha}, coluna ${XLSX.utils.encode_col(j)}`);
+                return 0;
+            }
+            const n = numeroSegest(bruto);
+            if (n === null || n < 0) { erros.push(`valor monetário inválido na linha ${linha}, coluna ${XLSX.utils.encode_col(j)}`); return 0; }
+            return centavosExcel(n);
+        };
+        for (const l of aba.linhas) {
+            const r = matriz[l.linhaPlanilha - 1];
+            const posto = moeda(r, cPostos, l.linhaPlanilha, true);
+            const a = moeda(r, filhos.j, l.linhaPlanilha), b = moeda(r, dependente.j, l.linhaPlanilha), d = moeda(r, diarias.j, l.linhaPlanilha);
+            if (l.valorEmpregado == null || l.qtdDias == null) { erros.push(`valor por empregado/dias ausentes na linha ${l.linhaPlanilha}`); continue; }
+            const bruto = Number(l.valorEmpregado) / 30 * Number(l.qtdDias);
+            const glosas = [l.vt, l.va, l.cesta].reduce((s, v) => s + (Number(v) || 0), 0);
+            if (posto !== centavosExcel(bruto - glosas) && posto !== centavosExcel(bruto) - centavosExcel(glosas)) erros.push(`subtotal dos postos não fecha com dias e benefícios na linha ${l.linhaPlanilha}`);
+            const final = centavos(l.valorTotal);
+            // Somente acresce o que consta discriminado e efetivamente compõe o total.
+            if (final !== posto + a + b + d) {
+                erros.push(`total a faturar não fecha com subtotal, reembolsos e diárias na linha ${l.linhaPlanilha}; confira se há valor não incluído na fórmula da planilha`);
+                continue;
+            }
+            if (a || b || d) {
+                l.outros = -(a + b + d) / 100;
+                l.ocorrencias = [l.ocorrencias, `Acréscimos discriminados na SEGEST (OUTROS negativo): assistência aos filhos R$ ${(a / 100).toFixed(2)}, auxílio ao dependente R$ ${(b / 100).toFixed(2)}, diárias R$ ${(d / 100).toFixed(2)}.`].filter(Boolean).join('\n');
+            }
+            l.composicaoTotalAFaturar = { valorPostos: posto / 100, assistenciaFilhos: a / 100, auxilioDependente: b / 100, diarias: d / 100 };
+        }
+        // IMR global não pode ser transformado em glosa individual sem uma regra de rateio validada.
+        const soma = aba.linhas.reduce((s, l) => s + (centavos(l.valorTotal) || 0), 0);
+        const resumos = [];
+        for (let i = inicio; i < matriz.length; i++) {
+            const r = matriz[i] || [], labels = norm(r);
+            if (labels.some(t => /^VALOR A FATURAR POS FR\s*\/\s*VALOR DA NOTA FISCAL/.test(t))) {
+                const n = numeroSegest(r[cFinal]);
+                if (n === null) erros.push('valor final da nota após FR ausente');
+                else resumos.push(centavos(n));
+            }
+            if (labels.some(t => /^VALOR DESCONTADO\s*[–—-]\s*GLOSA DE IMR/.test(t))) {
+                const n = numeroSegest(r[cFinal]);
+                if (n === null || centavos(n) !== 0) erros.push('IMR global não zerado ou não informado; necessário validar a distribuição por posto antes da importação');
+            }
+        }
+        if (resumos.length !== 1 || resumos[0] !== soma) erros.push('soma dos valores individuais não confere com o valor final da nota após FR (ou resumo ausente/ambíguo)');
+        if (erros.length) return { aba: nomeAba, erros, linhas: [] };
+        avisos.push('layout Valor Total a Faturar reconhecido: TR mapeado para VA; subtotal dos postos, acréscimos e valor final da nota conferidos. IMR global sem desconto.');
+        aba.avisos.push(...avisos);
+        return aba;
+    }
+
     function lerAbaSegest(matriz, nomeAba, mesclagens = []) {
         const iCab = localizarCabecalhoSegest(matriz);
-        if (iCab < 0) return null;
+        if (iCab < 0) return lerAbaSegestTotalAFaturar(matriz, nomeAba, mesclagens);
         const col = mapearColunasSegest(matriz, iCab, mesclagens);
         const faltando = CAMPOS_SEGEST.filter(d => d.obrigatorio && col[d.campo] === undefined).map(d => d.nomes[0]);
         if (faltando.length) return { aba: nomeAba, erros: [`colunas não encontradas: ${faltando.join(', ')}`], linhas: [] };
@@ -4788,7 +4882,7 @@ ${fonteReferencia}: ${referencia}`;
             const workbook = XLSX.read(buffer, { type: 'array' });
             const lido = lerPlanilhaSegest(workbook, arquivo.name);
             if (!lido.linhas.length) {
-                mostrarErroSnackbar(`Nenhuma aba de faturamento encontrada em "${arquivo.name}". O robô procura um cabeçalho com CPF, Posto de Trabalho e Valor Total.`);
+                mostrarErroSnackbar(`Nenhuma aba de faturamento encontrada em "${arquivo.name}". O robô procura CPF, Posto de Trabalho e Valor Total (ou o layout completo Valor Total a Faturar).`);
                 lido.avisos.forEach(a => console.warn('[SIGEO-Terceirizados] SEGEST:', a));
                 return;
             }
@@ -9436,7 +9530,7 @@ ${fonteReferencia}: ${referencia}`;
     P.lerDarfPaginaPrev = (t) => {
         const s = String(t || '');
         const numero = s.match(/N[úu]mero:[\s—–|]*(\d{2}\.\d{2}\.\d{5}\.\d{7}-\d)/)?.[1] || s.match(/\b(\d{2}\.\d{2}\.\d{5}\.\d{7}-\d)\b/)?.[1] || '';
-        const mc = s.match(/(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})[)\]|]?\s+[(\[|]?([^\n]+)/);
+        const mc = s.match(/(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})[)\]|]*[ \t]+[(\[|]*[ \t]*([^\n]+)/);
         const linhaPa = s.match(/(?:^|\n)\s*([a-zçã]+\/\d{4})\s+(\d{2}\/\d{2}\/\d{4})\s+\d{2}\.\d{2}\./i);
         const itens = [];
         const linhas = s.split('\n');
@@ -9444,7 +9538,8 @@ ${fonteReferencia}: ${referencia}`;
             const m = linhas[i].trim().match(new RegExp('^(\\d{4})\\s+(.+?)\\s+((?:' + DV + '\\s+)*' + DV + ')$'));
             if (!m || /^\d{4}\s+(?:\d{5}|\d{1,2}\s)/.test(linhas[i].trim())) continue;
             const vals = P.valoresPrev(m[3]);
-            const varia = linhas[i + 1]?.trim().match(/^(\d{2})\s+(.+)$/);
+            const varia = linhas[i + 1]?.trim().match(/^([0-9O]\d)\s+(.+)$/);
+            if (varia) varia[1] = varia[1].replace(/^O/, '0');
             itens.push({ codigo: varia ? `${m[1]}-${varia[1]}` : m[1], denominacao: (varia?.[2] || m[2]).trim(), principal: vals[0], total: vals[vals.length - 1],
                 encargos: vals.length > 2 ? vals.slice(1, -1).reduce((a, b) => a + b, 0) : 0 });
         }
@@ -9523,7 +9618,7 @@ ${fonteReferencia}: ${referencia}`;
         const fontes = paginas.fontes || [];
         const r = { declaracoes: [], darfs: [], comprovantes: [], dcomps: [], avisos: [], qtdPaginas: paginas.length };
         // 1) tipo, relatório e recibo de cada página (continuação herda da anterior do mesmo arquivo)
-        const info = [];
+        const info = [], debitosOcrPendentes = [];
         let ant = null;
         paginas.forEach((pg, i) => {
             const t = String(pg || ''), fonte = fontes[i] || { arquivo: '', pagina: i + 1 };
@@ -9538,7 +9633,8 @@ ${fonteReferencia}: ${referencia}`;
                 x.rel = !cab && herdou ? ant.rel : /RESUMO DE D[ÉE]{1,2}B[IÍ]TOS/i.test(cab) ? 'resumoDebitos' : /RESUMO DE CR[ÉE]{1,2}D[IÍ]TOS/i.test(cab) ? 'resumoCreditos'
                     : /POR DOCUMENTO/i.test(cab) ? 'creditosDocumento' : /DECLARA[ÇC][ÃA]O COMPLETA/i.test(cab) ? 'completa'
                     : /D[ÉE]{1,2}B[IÍ]TOS/i.test(cab) ? 'debitos' : /CR[ÉE]{1,2}D[IÍ]TOS/i.test(cab) ? 'creditos' : 'outro';
-                x.recibo = P.reciboDctfPrev(t.match(/N[úu]mero do Recibo[\s|\/:\]\[]*(\d{10,})/i)?.[1]) || (herdou ? ant.recibo : '');
+                const reciboSeparado = P.reciboDctfPrev(t.match(/N[úu]mero do Recibo[ \t|\/:\]\[]*(\d{10,}(?:[ \t]+\d{1,10})+)[ \t]*(?=\n|$)/i)?.[1]);
+                x.recibo = (reciboSeparado.length === 14 ? reciboSeparado : '') || P.reciboDctfPrev(t.match(/N[úu]mero do Recibo[\s|\/:\]\[]*(\d{10,})/i)?.[1]) || (herdou ? ant.recibo : '');
             } else if (sub === 'recibo') {
                 x.rel = 'recibo';
                 x.recibo = P.reciboDctfPrev(t.match(/N[ºo°]\s*do recibo de entrega[\s|\/:\]\[]*(\d{10,})/i)?.[1]);
@@ -9598,7 +9694,12 @@ ${fonteReferencia}: ${referencia}`;
                     for (let i = 0; i < linhas.length; i++) {
                         const l = linhas[i].trim();
                         const mg = l.match(/^Grupo:\s*(.+)$/i); if (mg) { grupo = mg[1]; continue; }
-                        const m = l.match(new RegExp('^(\\d{4}-\\d{2})\\s+(.*?)\\s*' + RX_PA + '\\s+((?:' + DV + '\\s+){9}' + DV + ')$'));
+                        let m = l.match(new RegExp('^(\\d{4}-\\d{2})\\s+(.*?)\\s*' + RX_PA + '\\s+((?:' + DV + '\\s+){9}' + DV + ')$'));
+                        let codigoOcr = false;
+                        if (!m && sg.fontes.some((f, k) => f.metodo === 'ocr' && sg.textos[k].includes(l))) {
+                            m = l.match(new RegExp('^(\\d{4}-\\d{3})\\s+(.*?)\\s*' + RX_PA + '\\s+((?:' + DV + '\\s+){9}' + DV + ')$'));
+                            codigoOcr = !!m;
+                        }
                         if (!m) continue;
                         let desc = m[2].trim();
                         const antes = linhas[i - 1]?.trim() || '', depois = linhas[i + 1]?.trim() || '';
@@ -9610,6 +9711,7 @@ ${fonteReferencia}: ${referencia}`;
                         const deb = { codigo: m[1], descricao: desc, grupo: P.grupoDctfPrev(grupo || desc, m[1]), pa: m[3], cnpjPrest,
                             original: v[0], exclusao: v[1], suspensao: v[2], parcelamento: v[3], compensacao: v[4], sf: v[5], sm: v[6], retencoes: v[7], pagamentos: v[8], saldo: v[9],
                             fonte: sg.fontes.find((f, k) => sg.textos[k].includes(l)) || fonte };
+                        if (codigoOcr) { debitosOcrPendentes.push({ d, deb }); continue; }
                         const chave = `${deb.codigo}|${deb.pa}|${deb.cnpjPrest}|${deb.original}|${deb.saldo}|${deb.compensacao}`;
                         if (!d.debitos.some(x => `${x.codigo}|${x.pa}|${x.cnpjPrest}|${x.original}|${x.saldo}|${x.compensacao}` === chave)) d.debitos.push(deb);
                     }
@@ -9686,9 +9788,53 @@ ${fonteReferencia}: ${referencia}`;
                 let dc = r.dcomps.find(x => x.numero === sg.dcomp);
                 if (!dc) { dc = { numero: sg.dcomp, recibo: null, extrato: null, fontes: [] }; r.dcomps.push(dc); }
                 const ex = P.lerDcompExtratoPrev(sg.dcomp, corpo);
+                // v2.5.40: o OCR pode ler 7 como / nos campos monetários. Não substituir
+                // indiscriminadamente: conferir o candidato com o TOTAL do extrato e o recibo,
+                // e exigir multa/juros legíveis, débito único e correspondência dos demais campos.
+                if (sg.fontes.some(f => f.metodo === 'ocr') && ex.debitos.length === 1) {
+                    const d = ex.debitos[0], rc = dc.recibo;
+                    const blocoDebito = corpo.split(/(?:^|\n)\s*\d{3}\.\s*D[ée]bito\s+/).slice(1).join('\n');
+                    const linha = rot => blocoDebito.match(new RegExp('(?:^|\\n)[ \\t]*' + rot + '[ \\t]+([^\\n]+)'))?.[1]?.trim() || '';
+                    const candidato = rot => {
+                        const t = linha(rot);
+                        if (!/^[\d./]+,\d{2}$/.test(t) || !t.includes('/')) return null;
+                        const opcoes = [t.replace(/\//g, '7'), t.replace(/\/(?=7)/g, '').replace(/\//g, '7')];
+                        return opcoes.some(x => new RegExp('^' + DV + '$').test(x) && P.ce(x) === totalImpresso) ? totalImpresso : null;
+                    };
+                    const totalImpresso = P.ce(corpo.match(new RegExp('(?:^|\\n)[ \\t]*TOTAL[ \\t]+(' + DV + ')[ \\t]*(?:\\n|$)'))?.[1]);
+                    const multa = P.ce(linha('Multa')), juros = P.ce(linha('Juros'));
+                    const principal = d.principal || candidato('Principal');
+                    const total = d.total || candidato('Total');
+                    if ((!d.principal || !d.total) && principal > 0 && total > 0 &&
+                        Number.isSafeInteger(multa) && Number.isSafeInteger(juros) && multa >= 0 && juros >= 0 &&
+                        principal + multa + juros === total && total === totalImpresso && total === ex.totalDebitos &&
+                        rc?.numero === ex.numero && rc.cnpj && rc.cnpj === ex.cnpj &&
+                        Object.keys(rc.grupos || {}).length === 1 && rc.grupos[d.grupo] === total) {
+                        d.principal = principal; d.total = total; d.multa = multa; d.juros = juros;
+                        d.ocrConfirmado = 'Valor recuperado do OCR e confirmado pelo total do extrato e recibo da PER/DCOMP';
+                    }
+                }
                 if (!dc.extrato || ex.debitos.length > dc.extrato.debitos.length) dc.extrato = ex;
                 dc.fontes.push(...sg.fontes);
             }
+        }
+        // Linhas de código com dígito excedente por OCR só são admitidas se o
+        // resumo da MESMA declaração confirmar univocamente código, valores e saldo.
+        // Limitado a retenções integralmente vinculadas, sem saldo nem compensação.
+        for (const d of r.declaracoes) {
+            const recuperados = [];
+            for (const { deb } of debitosOcrPendentes.filter(x => x.d === d)) {
+                if (deb.saldo !== 0 || deb.compensacao !== 0 || deb.original <= 0 || deb.retencoes !== deb.original ||
+                    [deb.exclusao, deb.suspensao, deb.parcelamento, deb.sf, deb.sm, deb.pagamentos].some(x => x !== 0)) continue;
+                const refs = d.resumoDebitos.filter(x => x.codigo.slice(0, 4) === deb.codigo.slice(0, 4) && x.original === deb.original && x.vinculado === deb.retencoes && x.saldo === 0);
+                if (refs.length !== 1) continue;
+                const ref = refs[0];
+                if (d.debitos.concat(recuperados).some(x => x.codigo === ref.codigo && x.original === deb.original && x.saldo === deb.saldo)) continue;
+                recuperados.push({ ...deb, codigo: ref.codigo, descricao: ref.descricao, grupo: ref.grupo, ocrConfirmado: 'Código e valores confirmados pelo relatório-resumo da DCTFWeb; conferir identificação do prestador no PDF original' });
+            }
+            if (recuperados.length && Number.isSafeInteger(d.totalDebito) && Number.isSafeInteger(d.totalSaldo) &&
+                d.debitos.concat(recuperados).reduce((s, x) => s + x.original, 0) === d.totalDebito &&
+                d.debitos.concat(recuperados).reduce((s, x) => s + x.saldo, 0) === d.totalSaldo) d.debitos.push(...recuperados);
         }
         return r;
     };
@@ -11518,7 +11664,7 @@ ${fonteReferencia}: ${referencia}`;
                     // biblioteca de planilhas não reconhece; como Uint8Array ela lê normalmente.
                     const wb = XLSX.read(new Uint8Array(buf.slice(0)), { type: 'array' }), lido = lerPlanilhaSegest(wb, a.nome);
                     if (lido.linhas.length) { EST.segest = lido; EST.segestOrigem = a.nome; await guardarSegestDiagnostico({ name: a.nome }, buf, wb, lido); }
-                    else EST.errosSegest.push(`"${a.nome}": não é a planilha de faturamento da SEGEST (sem aba com CPF, Posto de Trabalho e Valor Total). Junte a planilha pelo botão "Juntar planilha da SEGEST".`);
+                    else EST.errosSegest.push(`"${a.nome}": não é a planilha de faturamento da SEGEST (sem aba com CPF, Posto de Trabalho e Valor Total ou layout completo Valor Total a Faturar). Junte a planilha pelo botão "Juntar planilha da SEGEST".`);
                 } else pdfs.push({ name: a.nome, papel: a.papel || '', arrayBuffer: async () => buf.slice(0) });
             } catch (e) { EST.erros.push(`"${a.nome}": ${e.message}`); }
         }
