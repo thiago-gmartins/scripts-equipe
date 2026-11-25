@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         SIGEO - Robô Terceirizados
 // @namespace    http://tampermonkey.net/
-// @version      2.5.40
-// @description  v2.5.40: DCTFWeb reconhece recibos com digitos separados pelo OCR; PER/DCOMP de debito unico recupera valores ilegíveis somente com confirmação pelo total do extrato e recibo; preserva a conferência por código e demais módulos. v2.5.39: novo layout de faturamento com Valor Total a Faturar, TR, reembolsos e diárias; valida composição e IMR global sem inventar rateios. Preserva os layouts anteriores. v2.5.38: confere separadamente a UF do local da prestação e do município de incidência do ISSQN; esperado MG, com alerta de UF diferente ou não identificada, inclusive no DANFSe v2. Preserva a macro e as demais conferências. v2.5.37: versão de teste da atualização automática (sem mudanças no robô). v2.5.36: atualização automática pelo GitHub e aviso de nova versão no SIGEO. v2.5.35: retira apenas o botão Prev./FGTS da barra de ações do SIGEO; módulo previdenciário preservado, com acesso pelo menu do Tampermonkey e pelos PDFs locais. v2.5.34: folha Pessoal+ separa o demonstrativo mensal do adiantamento de férias pelo mesmo CPF e matrícula; resumos do departamento não entram nos valores individuais; soma bases e rubricas mensais repetidas; afastamentos com FGTS zero impresso têm justificativa documental, mantendo bases de INSS ausentes como pendência; observação do DARF distingue compensação de pagamento. v2.5.33: comprovante de DARF em que o banco não escreve "DARF" nem "Receita Federal" (ex.: Banco do Brasil, "Comprovante de pagamento de Inst. Nacional de Seguro Social") passa a ser reconhecido pela linha digitável da Receita Federal (código de barras de arrecadação com 0385) e vinculado ao DARF pelo número do documento que o código de barras contém; "Data de pagamento" lida como data do pagamento. v2.5.32: Relatório da Declaração Completa da DCTFWeb lido por OCR — as linhas "Número do Processo|… Tipo|DComp Valor|…" e "Descrição|…" (barras e letras trocadas pelo OCR) voltam a ser reconhecidas; sem isso a compensação ficava "sem nº da DComp" e a PER/DCOMP era tratada como posterior, comparada com saldo zero. CPRB (códigos 2985 e 2991) passa a contar no grupo CP Patronal, como no total do recibo da DCTFWeb. v2.5.31: comprovante lido por OCR com o "R$" trocado por "RS", "R5", "R§" ou "R $" (ex.: Pix do Sicoob) volta a ter o valor reconhecido — no DARF, o pagamento passa a ser vinculado pelo número do documento no identificador do Pix; na GFD, a observação traz valor, data, pagador e recebedor; data do Pix ("Transferido em") lida no comprovante do DARF; CPF da SEGEST com dígito verificador inválido é apontado, e o CPF provável dos documentos entra na observação do FGTS3. v2.5.30: consolida a base anexada (macro v2.0.2, períodos/aditivos) com a conciliação correta de PER/DCOMP posterior. Inclui pastas e subpastas, botão Juntar pasta e PDFs individuais do INSS identificados pela matrícula/nome do arquivo, validados com a folha; acumula todos os empregados e mantém a origem da identificação, sem associação por valores. v2.5.29: integração com macro v2.0.2 — envia metadados opcionais dos períodos para a conferência de Valor a Pagar, sem mudar as posições dos campos anteriores. v2.5.28: SEGEST com períodos e termos aditivos distintos na mesma aba; reconhece os cabeçalhos mesclados, soma dias e glosas, calcula o valor mensal equivalente ponderado e mantém uma linha por trabalhador. Preserva o Valor Total original, registra a composição nas Observações e mantém as validações para duplicações ambíguas. Base desta atualização: v2.5.26 anexada. v2.5.26: leitura mais robusta para qualquer empresa — antes do OCR, as linhas das tabelas são apagadas da imagem (bordas viravam "|", "/" e embaralhavam colunas); a orientação da página é escolhida pela confiança do OCR, não pelo tamanho do texto; página com texto embaralhado (sem nenhuma palavra de verdade) vai ao OCR; sobras de borda entre valores são ignoradas; o OCR guardado das versões anteriores é refeito uma vez. DARF/DCTFWeb: a compensação que a DCTFWeb não mostra sai numa frase só, com todas as DComp. v2.5.25: o robô não bloqueia a cópia; com a competência da planilha da SEGEST diferente da dos documentos, a confirmação de "Copiar para a planilha" abre com um alerta explicando o efeito na macro (aba do mês errado, ninguém na amostra). v2.5.23: checklist do Relatório SLDST editável na tela (FGTS Digital 1 a 5, DARF 1 a 3, GFD 1 a 4), já preenchido com o resultado do robô e a observação no padrão do relatório; a colagem (formato v5, macro mConferenciaPrev v3.0.0) leva o que estiver na tela, a quantidade da amostragem (20% da SEGEST, editável) e todos os terceirizados; a macro escolhe a amostra começando por quem ainda não foi conferido no ano. v2.5.22: conferência do DARF, da DCTFWeb e da PER/DCOMP (seção "Análise do DARF e da DCTFWeb" do POP_SLDST_002, itens DARF 1 a 6: dados da contratada, competência, número do recibo, saldo a pagar × DARFs pagos, PER/DCOMP juntada e valores compensados), com observação objetiva e o detalhe na aba DCTFWeb da memória; comprovante de DARF com fonte sem texto vai ao OCR; alerta de competência diferente em destaque; detalhe do FGTS Digital sem "Página X de Y": páginas diferentes com o mesmo tamanho de texto não são mais descartadas como cópia. v2.5.21: telas do portal do eSocial também em PDF com texto (letras separadas pelo navegador, ex. "T otalizador"); comprovante Pix do SISBB (Banco do Brasil); comprovante de vale-alimentação não é mais pré-marcado como FGTS. v2.5.20: lê o S-5001 impresso das telas do portal do eSocial ("Consulta Totalizador da Contribuição Previdenciária"); avisos de OCR e de consignado viram informação, não "Atenção". v2.5.19: leitura por OCR não gera mais pendência nem "Verificar" — só a observação de quais documentos foram lidos por OCR; página com texto ilegível (fonte sem mapeamento) vai ao OCR; comprovante do Banco do Brasil com letras espaçadas; vínculo do comprovante sem vencimento pelo pagamento dentro do prazo da guia. v2.5.18: valor lido por OCR que bate exatamente com documento digital (guia do FGTS, S-5001) não deixa o item pendente; fica registrado como lido por OCR e confirmado. Pendência de OCR passa a dizer quem e em que página. v2.5.17: pendências de OCR por fonte utilizada; comprovante Sicoob; rubricas e orientação do OCR; parcelas e totais rescisórios; conflitos de identificação e diagnóstico de leitura. Preserva notas, retenções, SEGEST, CSV, macro e formato PREVFGTS v4.
+// @version      2.5.41
+// @description  v2.5.41: usa o indicador de contribuinte CPRB do cadastro do fornecedor para a retenção de INSS a 3,5%; cadastro explicitamente desmarcado usa 11%; sem indicador confirmado preserva a regra anterior, sem inferir pela retenção. Mantém as travas da macro e a conferência por serviço. v2.5.40: DCTFWeb reconhece recibos com digitos separados pelo OCR; PER/DCOMP de debito unico recupera valores ilegíveis somente com confirmação pelo total do extrato e recibo; preserva a conferência por código e demais módulos. v2.5.39: novo layout de faturamento com Valor Total a Faturar, TR, reembolsos e diárias; valida composição e IMR global sem inventar rateios. Preserva os layouts anteriores. v2.5.38: confere separadamente a UF do local da prestação e do município de incidência do ISSQN; esperado MG, com alerta de UF diferente ou não identificada, inclusive no DANFSe v2. Preserva a macro e as demais conferências. v2.5.37: versão de teste da atualização automática (sem mudanças no robô). v2.5.36: atualização automática pelo GitHub e aviso de nova versão no SIGEO. v2.5.35: retira apenas o botão Prev./FGTS da barra de ações do SIGEO; módulo previdenciário preservado, com acesso pelo menu do Tampermonkey e pelos PDFs locais. v2.5.34: folha Pessoal+ separa o demonstrativo mensal do adiantamento de férias pelo mesmo CPF e matrícula; resumos do departamento não entram nos valores individuais; soma bases e rubricas mensais repetidas; afastamentos com FGTS zero impresso têm justificativa documental, mantendo bases de INSS ausentes como pendência; observação do DARF distingue compensação de pagamento. v2.5.33: comprovante de DARF em que o banco não escreve "DARF" nem "Receita Federal" (ex.: Banco do Brasil, "Comprovante de pagamento de Inst. Nacional de Seguro Social") passa a ser reconhecido pela linha digitável da Receita Federal (código de barras de arrecadação com 0385) e vinculado ao DARF pelo número do documento que o código de barras contém; "Data de pagamento" lida como data do pagamento. v2.5.32: Relatório da Declaração Completa da DCTFWeb lido por OCR — as linhas "Número do Processo|… Tipo|DComp Valor|…" e "Descrição|…" (barras e letras trocadas pelo OCR) voltam a ser reconhecidas; sem isso a compensação ficava "sem nº da DComp" e a PER/DCOMP era tratada como posterior, comparada com saldo zero. CPRB (códigos 2985 e 2991) passa a contar no grupo CP Patronal, como no total do recibo da DCTFWeb. v2.5.31: comprovante lido por OCR com o "R$" trocado por "RS", "R5", "R§" ou "R $" (ex.: Pix do Sicoob) volta a ter o valor reconhecido — no DARF, o pagamento passa a ser vinculado pelo número do documento no identificador do Pix; na GFD, a observação traz valor, data, pagador e recebedor; data do Pix ("Transferido em") lida no comprovante do DARF; CPF da SEGEST com dígito verificador inválido é apontado, e o CPF provável dos documentos entra na observação do FGTS3. v2.5.30: consolida a base anexada (macro v2.0.2, períodos/aditivos) com a conciliação correta de PER/DCOMP posterior. Inclui pastas e subpastas, botão Juntar pasta e PDFs individuais do INSS identificados pela matrícula/nome do arquivo, validados com a folha; acumula todos os empregados e mantém a origem da identificação, sem associação por valores. v2.5.29: integração com macro v2.0.2 — envia metadados opcionais dos períodos para a conferência de Valor a Pagar, sem mudar as posições dos campos anteriores. v2.5.28: SEGEST com períodos e termos aditivos distintos na mesma aba; reconhece os cabeçalhos mesclados, soma dias e glosas, calcula o valor mensal equivalente ponderado e mantém uma linha por trabalhador. Preserva o Valor Total original, registra a composição nas Observações e mantém as validações para duplicações ambíguas. Base desta atualização: v2.5.26 anexada. v2.5.26: leitura mais robusta para qualquer empresa — antes do OCR, as linhas das tabelas são apagadas da imagem (bordas viravam "|", "/" e embaralhavam colunas); a orientação da página é escolhida pela confiança do OCR, não pelo tamanho do texto; página com texto embaralhado (sem nenhuma palavra de verdade) vai ao OCR; sobras de borda entre valores são ignoradas; o OCR guardado das versões anteriores é refeito uma vez. DARF/DCTFWeb: a compensação que a DCTFWeb não mostra sai numa frase só, com todas as DComp. v2.5.25: o robô não bloqueia a cópia; com a competência da planilha da SEGEST diferente da dos documentos, a confirmação de "Copiar para a planilha" abre com um alerta explicando o efeito na macro (aba do mês errado, ninguém na amostra). v2.5.23: checklist do Relatório SLDST editável na tela (FGTS Digital 1 a 5, DARF 1 a 3, GFD 1 a 4), já preenchido com o resultado do robô e a observação no padrão do relatório; a colagem (formato v5, macro mConferenciaPrev v3.0.0) leva o que estiver na tela, a quantidade da amostragem (20% da SEGEST, editável) e todos os terceirizados; a macro escolhe a amostra começando por quem ainda não foi conferido no ano. v2.5.22: conferência do DARF, da DCTFWeb e da PER/DCOMP (seção "Análise do DARF e da DCTFWeb" do POP_SLDST_002, itens DARF 1 a 6: dados da contratada, competência, número do recibo, saldo a pagar × DARFs pagos, PER/DCOMP juntada e valores compensados), com observação objetiva e o detalhe na aba DCTFWeb da memória; comprovante de DARF com fonte sem texto vai ao OCR; alerta de competência diferente em destaque; detalhe do FGTS Digital sem "Página X de Y": páginas diferentes com o mesmo tamanho de texto não são mais descartadas como cópia. v2.5.21: telas do portal do eSocial também em PDF com texto (letras separadas pelo navegador, ex. "T otalizador"); comprovante Pix do SISBB (Banco do Brasil); comprovante de vale-alimentação não é mais pré-marcado como FGTS. v2.5.20: lê o S-5001 impresso das telas do portal do eSocial ("Consulta Totalizador da Contribuição Previdenciária"); avisos de OCR e de consignado viram informação, não "Atenção". v2.5.19: leitura por OCR não gera mais pendência nem "Verificar" — só a observação de quais documentos foram lidos por OCR; página com texto ilegível (fonte sem mapeamento) vai ao OCR; comprovante do Banco do Brasil com letras espaçadas; vínculo do comprovante sem vencimento pelo pagamento dentro do prazo da guia. v2.5.18: valor lido por OCR que bate exatamente com documento digital (guia do FGTS, S-5001) não deixa o item pendente; fica registrado como lido por OCR e confirmado. Pendência de OCR passa a dizer quem e em que página. v2.5.17: pendências de OCR por fonte utilizada; comprovante Sicoob; rubricas e orientação do OCR; parcelas e totais rescisórios; conflitos de identificação e diagnóstico de leitura. Preserva notas, retenções, SEGEST, CSV, macro e formato PREVFGTS v4.
 // @match        https://exe.sigeo.jt.jus.br/*
 // @match        https://proad.trt3.jus.br/*
 // @match        file:///*
@@ -2513,6 +2513,78 @@
         }
     }
 
+    // v2.5.41: leitura somente do cadastro do próprio fornecedor. Não deduz CPRB pelo
+    // valor retido, nem altera o cadastro. Sem confirmação, preserva a regra anterior.
+    const cacheCprbFornecedor = new Map();
+    function lerIndicadorCprb(obj) {
+        if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return null;
+        const norm = v => normalizarString(String(v ?? '')).replace(/[^A-Z0-9]/g, '');
+        const campos = new Set(['CPRB', 'CONTRIBUINTECPRB', 'INDICADORCPRB', 'INDCPRB', 'OPTANTECPRB',
+            'CONTRIBUINTEPREVIDENCIARIOSOBRERECEITABRUTA', 'CONTRIBUINTECONTRIBUICAOPREVIDENCIARIASOBRERECEITABRUTA',
+            'CONTRIBUINTEDACONTRIBUICAOPREVIDENCIARIASOBREARECEITABRUTA', 'CONTRIBUICAOPREVIDENCIARIASOBRERECEITABRUTA',
+            'CONTRIBUICAOPREVIDENCIARIASOBREARECEITABRUTA', 'CONTRIBUINTERECEITABRUTA',
+            'CONTRIBUINTECONTRIBUICAOPREVIDENCIARIASOBREARECEITABRUTA', 'CONTRIBUINTECONTRIBUICAOPREVIDENCIARIARECEITABRUTA']);
+        const flags = [];
+        for (const [k, v] of Object.entries(obj)) {
+            const chave = norm(k);
+            if (!campos.has(chave) && !(/^(?:IS|FL|ST|IN|IND|INDICADOR|FLAG)?CONTRIBUINTE/.test(chave) && chave.includes('PREVIDENCIARIA') && chave.includes('RECEITABRUTA'))) continue;
+            const valor = typeof v === 'object' && v !== null ? (v.valor ?? v.value ?? v.checked ?? v.sigla ?? v.nome ?? v.descricao) : v;
+            const t = norm(valor);
+            if (valor === true || valor === 1 || ['TRUE','SIM','S','1','YES','Y'].includes(t)) flags.push(true);
+            else if (valor === false || valor === 0 || ['FALSE','NAO','N','0','NO'].includes(t)) flags.push(false);
+        }
+        return flags.length && flags.every(v => v === flags[0]) ? flags[0] : null;
+    }
+    function indicadorCprbRegistro(registro) {
+        const f = registro?.fornecedor;
+        const outro = registro?.contratacao?.contaBancaria?.fornecedor;
+        const a = lerIndicadorCprb(f);
+        if (a !== null) return a;
+        const dig = v => String(v ?? '').replace(/\D/g, '');
+        if (f && outro && ((f.id != null && outro.id != null && String(f.id) === String(outro.id)) ||
+            (dig(f.documento).length === 14 && dig(f.documento) === dig(outro.documento)))) return lerIndicadorCprb(outro);
+        return null;
+    }
+    async function consultarCprbFornecedor(registro) {
+        const direto = indicadorCprbRegistro(registro);
+        if (direto !== null) return direto;
+        const f = registro?.fornecedor;
+        if (!f || f.id == null || !/^\d+$/.test(String(f.id))) return null;
+        const chave = String(f.id) + '|' + String(f.documento ?? '').replace(/\D/g, '');
+        if (cacheCprbFornecedor.has(chave)) return cacheCprbFornecedor.get(chave);
+        // Rota de detalhe a confirmar no SIGEO: não interrompe o lote se não estiver disponível.
+        // Um único GET por fornecedor no lote, com tempo curto, sem renovar sessão nem repetir.
+        let flag = null;
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 5000);
+        try {
+            const resposta = await fetch(`https://api.sigeo.jt.jus.br/sidof-service/fornecedores/${encodeURIComponent(f.id)}/jt`, {
+                method: 'GET', headers: { Authorization: `Bearer ${BEARER_TOKEN}`, Accept: 'application/json' }, signal: ctrl.signal
+            });
+            if (resposta.ok) {
+                const json = await resposta.json();
+                const cadastro = json?.fornecedor ?? json?.data?.fornecedor ?? json?.data ?? json;
+                const dig = v => String(v ?? '').replace(/\D/g, '');
+                const idOk = cadastro?.id != null && String(cadastro.id) === String(f.id);
+                const cnpj = dig(f.documento), cnpjCadastro = dig(cadastro?.documento ?? cadastro?.cnpj);
+                const cnpjOk = cnpj.length === 14 && cnpj === cnpjCadastro;
+                const idDiverge = cadastro?.id != null && String(cadastro.id) !== String(f.id);
+                const cnpjDiverge = cnpj.length === 14 && cnpjCadastro.length === 14 && cnpj !== cnpjCadastro;
+                if ((idOk || cnpjOk) && !idDiverge && !cnpjDiverge) flag = lerIndicadorCprb(cadastro);
+            }
+        } catch (e) { /* consulta complementar não pode interromper a extração */ }
+        finally { clearTimeout(timer); }
+        cacheCprbFornecedor.set(chave, flag);
+        if (flag === null) console.warn('[SIGEO-Terceirizados] CPRB: indicador do cadastro não identificado; mantida a regra anterior.');
+        return flag;
+    }
+    function taxaInssDaNota(d, cod, perfil, cfg) {
+        const flag = d.cprbFornecedor ?? indicadorCprbRegistro(d.registro);
+        if (flag === true) return 0.035;
+        if (flag === false) return cfg.aliquotaInss;
+        return perfil?.codigo === cod ? perfil.aliquota : cfg.aliquotaInss;
+    }
+
     /* ====================================================================================
      * 7. RETENÇÃO PREVIDENCIÁRIA (INSS) — já vem no próprio registro do SIGEO,
      *    igual ao robô de Manutenção Predial, mas aqui também trazemos o "Tipo de Serviço".
@@ -2755,6 +2827,7 @@ ${fonteReferencia}: ${referencia}`;
             }
 
             // -------- Retenção previdenciária (INSS) + Tipo de Serviço --------
+            documento.cprbFornecedor = await consultarCprbFornecedor(registroSelecionado);
             documento.retencoesPrevidenciarias = obterRetencoesPrevidenciarias(registroSelecionado);
             documento.retencaoPrevidenciaria = documento.retencoesPrevidenciarias[0]
                 || { baseCalculo: null, valorRetencao: null, tipoServico: '' };
@@ -2945,6 +3018,7 @@ ${fonteReferencia}: ${referencia}`;
             if (!retomar) {
                 registrosLoteAtual = selecionadosValidos.map(r => Object.freeze({ ...r, linha: null }));
                 documentosProcessados.length = 0;
+                cacheCprbFornecedor.clear();
                 reiniciarBuscaProad();
             }
             exibirModalProgresso(pendentes.length);
@@ -4590,10 +4664,14 @@ ${fonteReferencia}: ${referencia}`;
                 else if (!ls.length) nota.erros.push(`${grupo.texto}: há retenção no SIGEO (base ${Formatacao.formatarValorBrasileiro(sg.base / 100)}), mas nenhum posto desse serviço na SEGEST.`);
                 else if (sg.base !== baseSegest - matGrupo) nota.erros.push(`${grupo.texto}: base de INSS do SIGEO (${Formatacao.formatarValorBrasileiro(sg.base / 100)}) diferente da soma da SEGEST (${Formatacao.formatarValorBrasileiro(baseSegest / 100)}).`);
                 if (sg && ls.length) {
-                    const taxaInss = perfilInss?.codigo === cod ? perfilInss.aliquota : cfg.aliquotaInss;
+                    const taxaInss = taxaInssDaNota(d, cod, perfilInss, cfg);
                     grupo.aliquota = taxaInss;
                     const esperada = centavosExcel(((baseSegest - matGrupo) / 100) * taxaInss);
-                    if (Math.abs(esperada - sg.ret) > 1) nota.alertas.push(`${grupo.texto}: retenção do SIGEO (${Formatacao.formatarValorBrasileiro(sg.ret / 100)}) diferente de ${Formatacao.formatarValorBrasileiro(taxaInss * 100)}% da base (${Formatacao.formatarValorBrasileiro(esperada / 100)}).`);
+                    if (Math.abs(esperada - sg.ret) > 1) {
+                        nota.alertas.push(`${grupo.texto}: retenção do SIGEO (${Formatacao.formatarValorBrasileiro(sg.ret / 100)}) diferente de ${Formatacao.formatarValorBrasileiro(taxaInss * 100)}% da base (${Formatacao.formatarValorBrasileiro(esperada / 100)}).`);
+                        if ((d.cprbFornecedor ?? indicadorCprbRegistro(d.registro)) === null && taxaInss === cfg.aliquotaInss)
+                            nota.alertas.push('Indicador CPRB não confirmado no cadastro do fornecedor. Confira a opção de contribuinte da receita bruta no SIGEO.');
+                    }
                     Object.assign(grupo, fecharGrupo(ls, sg.ret, l => centavosExcel((((centavos(l.valorTotal) || 0) - (l._material || 0)) / 100) * taxaInss)));
                     if (grupo.status === 'divergente') nota.erros.push(`${grupo.texto}: diferença de ${Formatacao.formatarValorBrasileiro(grupo.ajuste / 100)} entre o INSS do SIGEO e o calculado por posto. Grande demais para ser arredondamento.`);
                     const planoValido = taxaInss !== cfg.aliquotaInss && sg.base === baseSegest
