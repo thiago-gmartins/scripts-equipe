@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         SIGEO - Robô Terceirizados
 // @namespace    http://tampermonkey.net/
-// @version      2.5.48
-// @description  v2.5.48: folha analítica da Interfort com "Adm issão" partido no texto do PDF volta a ser lida (mesma normalização que o layout Senior já fazia); sem a palavra partida, a leitura é a mesma. v2.5.47: Fator Qualidade "Sem resposta" (IMR sem avaliação, ex.: Rio Minas 10/2026, Patos de Minas) é aceito como os demais textos de não avaliado: vira aviso e não bloqueia a importação da SEGEST. v2.5.46: aba de correção de mês anterior com CPF e coluna "Diferença a corrigir" (ex.: "Correção Cesta Setembro" da Trabiserv) passa a ser lida; a diferença do posto igual à do mesmo CPF vai para OUTROS, como as correções já reconhecidas. v2.5.45: Comprovante BB com título, valor, data e ID separados por espaço comum (sem letras espaçadas) passa a ser lido; relatório do INSS sem CPF liga pelo nome também quando só as partículas (de, da, do, das, dos, e) diferem, ou pelo CPF de cobertura citado na SEGEST, apenas quando a regra anterior não liga e a identificação é única. v2.5.44: recupera linhas da Relação de Bases do INSS com taxa deformada pelo OCR e distingue total informado, linhas lidas e vínculos no tomador. v2.5.43: reconhece períodos de TA com início aberto (A partir de dd/mm/aaaa) na SEGEST, preservando a consolidação e as travas existentes. v2.5.42: reconhece o campo real contribuintePrevReceita do SIGEO; consulta complementar pela rota de fornecedores/query/jt, com conferência estrita do CNPJ e sem inferir pelo valor retido. v2.5.41: usa o indicador de contribuinte CPRB do cadastro do fornecedor para a retenção de INSS a 3,5%; cadastro explicitamente desmarcado usa 11%; sem indicador confirmado preserva a regra anterior, sem inferir pela retenção. Mantém as travas da macro e a conferência por serviço. v2.5.40: DCTFWeb reconhece recibos com digitos separados pelo OCR; PER/DCOMP de debito unico recupera valores ilegíveis somente com confirmação pelo total do extrato e recibo; preserva a conferência por código e demais módulos. v2.5.39: novo layout de faturamento com Valor Total a Faturar, TR, reembolsos e diárias; valida composição e IMR global sem inventar rateios. Preserva os layouts anteriores. v2.5.38: confere separadamente a UF do local da prestação e do município de incidência do ISSQN; esperado MG, com alerta de UF diferente ou não identificada, inclusive no DANFSe v2. Preserva a macro e as demais conferências. v2.5.37: versão de teste da atualização automática (sem mudanças no robô). v2.5.36: atualização automática pelo GitHub e aviso de nova versão no SIGEO. v2.5.35: retira apenas o botão Prev./FGTS da barra de ações do SIGEO; módulo previdenciário preservado, com acesso pelo menu do Tampermonkey e pelos PDFs locais. v2.5.34: folha Pessoal+ separa o demonstrativo mensal do adiantamento de férias pelo mesmo CPF e matrícula; resumos do departamento não entram nos valores individuais; soma bases e rubricas mensais repetidas; afastamentos com FGTS zero impresso têm justificativa documental, mantendo bases de INSS ausentes como pendência; observação do DARF distingue compensação de pagamento. v2.5.33: comprovante de DARF em que o banco não escreve "DARF" nem "Receita Federal" (ex.: Banco do Brasil, "Comprovante de pagamento de Inst. Nacional de Seguro Social") passa a ser reconhecido pela linha digitável da Receita Federal (código de barras de arrecadação com 0385) e vinculado ao DARF pelo número do documento que o código de barras contém; "Data de pagamento" lida como data do pagamento. v2.5.32: Relatório da Declaração Completa da DCTFWeb lido por OCR — as linhas "Número do Processo|… Tipo|DComp Valor|…" e "Descrição|…" (barras e letras trocadas pelo OCR) voltam a ser reconhecidas; sem isso a compensação ficava "sem nº da DComp" e a PER/DCOMP era tratada como posterior, comparada com saldo zero. CPRB (códigos 2985 e 2991) passa a contar no grupo CP Patronal, como no total do recibo da DCTFWeb. v2.5.31: comprovante lido por OCR com o "R$" trocado por "RS", "R5", "R§" ou "R $" (ex.: Pix do Sicoob) volta a ter o valor reconhecido — no DARF, o pagamento passa a ser vinculado pelo número do documento no identificador do Pix; na GFD, a observação traz valor, data, pagador e recebedor; data do Pix ("Transferido em") lida no comprovante do DARF; CPF da SEGEST com dígito verificador inválido é apontado, e o CPF provável dos documentos entra na observação do FGTS3. v2.5.30: consolida a base anexada (macro v2.0.2, períodos/aditivos) com a conciliação correta de PER/DCOMP posterior. Inclui pastas e subpastas, botão Juntar pasta e PDFs individuais do INSS identificados pela matrícula/nome do arquivo, validados com a folha; acumula todos os empregados e mantém a origem da identificação, sem associação por valores. v2.5.29: integração com macro v2.0.2 — envia metadados opcionais dos períodos para a conferência de Valor a Pagar, sem mudar as posições dos campos anteriores. v2.5.28: SEGEST com períodos e termos aditivos distintos na mesma aba; reconhece os cabeçalhos mesclados, soma dias e glosas, calcula o valor mensal equivalente ponderado e mantém uma linha por trabalhador. Preserva o Valor Total original, registra a composição nas Observações e mantém as validações para duplicações ambíguas. Base desta atualização: v2.5.26 anexada. v2.5.26: leitura mais robusta para qualquer empresa — antes do OCR, as linhas das tabelas são apagadas da imagem (bordas viravam "|", "/" e embaralhavam colunas); a orientação da página é escolhida pela confiança do OCR, não pelo tamanho do texto; página com texto embaralhado (sem nenhuma palavra de verdade) vai ao OCR; sobras de borda entre valores são ignoradas; o OCR guardado das versões anteriores é refeito uma vez. DARF/DCTFWeb: a compensação que a DCTFWeb não mostra sai numa frase só, com todas as DComp. v2.5.25: o robô não bloqueia a cópia; com a competência da planilha da SEGEST diferente da dos documentos, a confirmação de "Copiar para a planilha" abre com um alerta explicando o efeito na macro (aba do mês errado, ninguém na amostra). v2.5.23: checklist do Relatório SLDST editável na tela (FGTS Digital 1 a 5, DARF 1 a 3, GFD 1 a 4), já preenchido com o resultado do robô e a observação no padrão do relatório; a colagem (formato v5, macro mConferenciaPrev v3.0.0) leva o que estiver na tela, a quantidade da amostragem (20% da SEGEST, editável) e todos os terceirizados; a macro escolhe a amostra começando por quem ainda não foi conferido no ano. v2.5.22: conferência do DARF, da DCTFWeb e da PER/DCOMP (seção "Análise do DARF e da DCTFWeb" do POP_SLDST_002, itens DARF 1 a 6: dados da contratada, competência, número do recibo, saldo a pagar × DARFs pagos, PER/DCOMP juntada e valores compensados), com observação objetiva e o detalhe na aba DCTFWeb da memória; comprovante de DARF com fonte sem texto vai ao OCR; alerta de competência diferente em destaque; detalhe do FGTS Digital sem "Página X de Y": páginas diferentes com o mesmo tamanho de texto não são mais descartadas como cópia. v2.5.21: telas do portal do eSocial também em PDF com texto (letras separadas pelo navegador, ex. "T otalizador"); comprovante Pix do SISBB (Banco do Brasil); comprovante de vale-alimentação não é mais pré-marcado como FGTS. v2.5.20: lê o S-5001 impresso das telas do portal do eSocial ("Consulta Totalizador da Contribuição Previdenciária"); avisos de OCR e de consignado viram informação, não "Atenção". v2.5.19: leitura por OCR não gera mais pendência nem "Verificar" — só a observação de quais documentos foram lidos por OCR; página com texto ilegível (fonte sem mapeamento) vai ao OCR; comprovante do Banco do Brasil com letras espaçadas; vínculo do comprovante sem vencimento pelo pagamento dentro do prazo da guia. v2.5.18: valor lido por OCR que bate exatamente com documento digital (guia do FGTS, S-5001) não deixa o item pendente; fica registrado como lido por OCR e confirmado. Pendência de OCR passa a dizer quem e em que página. v2.5.17: pendências de OCR por fonte utilizada; comprovante Sicoob; rubricas e orientação do OCR; parcelas e totais rescisórios; conflitos de identificação e diagnóstico de leitura. Preserva notas, retenções, SEGEST, CSV, macro e formato PREVFGTS v4.
+// @version      2.5.49
+// @description  v2.5.49: novos layouts da MFC (10/2026): folha "Folha de Pagamento" com Cód/Nome/Função; "Demonstrativo eSocial – Evento S-5001" por trabalhador; GFD escaneada (OCR) reconhecida e ligada ao detalhe da guia só quando empregador, competência, total e número da guia (lido por OCR) conferem. Cada leitor novo só entra quando os anteriores não leram nada. v2.5.48: folha analítica da Interfort com "Adm issão" partido no texto do PDF volta a ser lida (mesma normalização que o layout Senior já fazia); sem a palavra partida, a leitura é a mesma. v2.5.47: Fator Qualidade "Sem resposta" (IMR sem avaliação, ex.: Rio Minas 10/2026, Patos de Minas) é aceito como os demais textos de não avaliado: vira aviso e não bloqueia a importação da SEGEST. v2.5.46: aba de correção de mês anterior com CPF e coluna "Diferença a corrigir" (ex.: "Correção Cesta Setembro" da Trabiserv) passa a ser lida; a diferença do posto igual à do mesmo CPF vai para OUTROS, como as correções já reconhecidas. v2.5.45: Comprovante BB com título, valor, data e ID separados por espaço comum (sem letras espaçadas) passa a ser lido; relatório do INSS sem CPF liga pelo nome também quando só as partículas (de, da, do, das, dos, e) diferem, ou pelo CPF de cobertura citado na SEGEST, apenas quando a regra anterior não liga e a identificação é única. v2.5.44: recupera linhas da Relação de Bases do INSS com taxa deformada pelo OCR e distingue total informado, linhas lidas e vínculos no tomador. v2.5.43: reconhece períodos de TA com início aberto (A partir de dd/mm/aaaa) na SEGEST, preservando a consolidação e as travas existentes. v2.5.42: reconhece o campo real contribuintePrevReceita do SIGEO; consulta complementar pela rota de fornecedores/query/jt, com conferência estrita do CNPJ e sem inferir pelo valor retido. v2.5.41: usa o indicador de contribuinte CPRB do cadastro do fornecedor para a retenção de INSS a 3,5%; cadastro explicitamente desmarcado usa 11%; sem indicador confirmado preserva a regra anterior, sem inferir pela retenção. Mantém as travas da macro e a conferência por serviço. v2.5.40: DCTFWeb reconhece recibos com digitos separados pelo OCR; PER/DCOMP de debito unico recupera valores ilegíveis somente com confirmação pelo total do extrato e recibo; preserva a conferência por código e demais módulos. v2.5.39: novo layout de faturamento com Valor Total a Faturar, TR, reembolsos e diárias; valida composição e IMR global sem inventar rateios. Preserva os layouts anteriores. v2.5.38: confere separadamente a UF do local da prestação e do município de incidência do ISSQN; esperado MG, com alerta de UF diferente ou não identificada, inclusive no DANFSe v2. Preserva a macro e as demais conferências. v2.5.37: versão de teste da atualização automática (sem mudanças no robô). v2.5.36: atualização automática pelo GitHub e aviso de nova versão no SIGEO. v2.5.35: retira apenas o botão Prev./FGTS da barra de ações do SIGEO; módulo previdenciário preservado, com acesso pelo menu do Tampermonkey e pelos PDFs locais. v2.5.34: folha Pessoal+ separa o demonstrativo mensal do adiantamento de férias pelo mesmo CPF e matrícula; resumos do departamento não entram nos valores individuais; soma bases e rubricas mensais repetidas; afastamentos com FGTS zero impresso têm justificativa documental, mantendo bases de INSS ausentes como pendência; observação do DARF distingue compensação de pagamento. v2.5.33: comprovante de DARF em que o banco não escreve "DARF" nem "Receita Federal" (ex.: Banco do Brasil, "Comprovante de pagamento de Inst. Nacional de Seguro Social") passa a ser reconhecido pela linha digitável da Receita Federal (código de barras de arrecadação com 0385) e vinculado ao DARF pelo número do documento que o código de barras contém; "Data de pagamento" lida como data do pagamento. v2.5.32: Relatório da Declaração Completa da DCTFWeb lido por OCR — as linhas "Número do Processo|… Tipo|DComp Valor|…" e "Descrição|…" (barras e letras trocadas pelo OCR) voltam a ser reconhecidas; sem isso a compensação ficava "sem nº da DComp" e a PER/DCOMP era tratada como posterior, comparada com saldo zero. CPRB (códigos 2985 e 2991) passa a contar no grupo CP Patronal, como no total do recibo da DCTFWeb. v2.5.31: comprovante lido por OCR com o "R$" trocado por "RS", "R5", "R§" ou "R $" (ex.: Pix do Sicoob) volta a ter o valor reconhecido — no DARF, o pagamento passa a ser vinculado pelo número do documento no identificador do Pix; na GFD, a observação traz valor, data, pagador e recebedor; data do Pix ("Transferido em") lida no comprovante do DARF; CPF da SEGEST com dígito verificador inválido é apontado, e o CPF provável dos documentos entra na observação do FGTS3. v2.5.30: consolida a base anexada (macro v2.0.2, períodos/aditivos) com a conciliação correta de PER/DCOMP posterior. Inclui pastas e subpastas, botão Juntar pasta e PDFs individuais do INSS identificados pela matrícula/nome do arquivo, validados com a folha; acumula todos os empregados e mantém a origem da identificação, sem associação por valores. v2.5.29: integração com macro v2.0.2 — envia metadados opcionais dos períodos para a conferência de Valor a Pagar, sem mudar as posições dos campos anteriores. v2.5.28: SEGEST com períodos e termos aditivos distintos na mesma aba; reconhece os cabeçalhos mesclados, soma dias e glosas, calcula o valor mensal equivalente ponderado e mantém uma linha por trabalhador. Preserva o Valor Total original, registra a composição nas Observações e mantém as validações para duplicações ambíguas. Base desta atualização: v2.5.26 anexada. v2.5.26: leitura mais robusta para qualquer empresa — antes do OCR, as linhas das tabelas são apagadas da imagem (bordas viravam "|", "/" e embaralhavam colunas); a orientação da página é escolhida pela confiança do OCR, não pelo tamanho do texto; página com texto embaralhado (sem nenhuma palavra de verdade) vai ao OCR; sobras de borda entre valores são ignoradas; o OCR guardado das versões anteriores é refeito uma vez. DARF/DCTFWeb: a compensação que a DCTFWeb não mostra sai numa frase só, com todas as DComp. v2.5.25: o robô não bloqueia a cópia; com a competência da planilha da SEGEST diferente da dos documentos, a confirmação de "Copiar para a planilha" abre com um alerta explicando o efeito na macro (aba do mês errado, ninguém na amostra). v2.5.23: checklist do Relatório SLDST editável na tela (FGTS Digital 1 a 5, DARF 1 a 3, GFD 1 a 4), já preenchido com o resultado do robô e a observação no padrão do relatório; a colagem (formato v5, macro mConferenciaPrev v3.0.0) leva o que estiver na tela, a quantidade da amostragem (20% da SEGEST, editável) e todos os terceirizados; a macro escolhe a amostra começando por quem ainda não foi conferido no ano. v2.5.22: conferência do DARF, da DCTFWeb e da PER/DCOMP (seção "Análise do DARF e da DCTFWeb" do POP_SLDST_002, itens DARF 1 a 6: dados da contratada, competência, número do recibo, saldo a pagar × DARFs pagos, PER/DCOMP juntada e valores compensados), com observação objetiva e o detalhe na aba DCTFWeb da memória; comprovante de DARF com fonte sem texto vai ao OCR; alerta de competência diferente em destaque; detalhe do FGTS Digital sem "Página X de Y": páginas diferentes com o mesmo tamanho de texto não são mais descartadas como cópia. v2.5.21: telas do portal do eSocial também em PDF com texto (letras separadas pelo navegador, ex. "T otalizador"); comprovante Pix do SISBB (Banco do Brasil); comprovante de vale-alimentação não é mais pré-marcado como FGTS. v2.5.20: lê o S-5001 impresso das telas do portal do eSocial ("Consulta Totalizador da Contribuição Previdenciária"); avisos de OCR e de consignado viram informação, não "Atenção". v2.5.19: leitura por OCR não gera mais pendência nem "Verificar" — só a observação de quais documentos foram lidos por OCR; página com texto ilegível (fonte sem mapeamento) vai ao OCR; comprovante do Banco do Brasil com letras espaçadas; vínculo do comprovante sem vencimento pelo pagamento dentro do prazo da guia. v2.5.18: valor lido por OCR que bate exatamente com documento digital (guia do FGTS, S-5001) não deixa o item pendente; fica registrado como lido por OCR e confirmado. Pendência de OCR passa a dizer quem e em que página. v2.5.17: pendências de OCR por fonte utilizada; comprovante Sicoob; rubricas e orientação do OCR; parcelas e totais rescisórios; conflitos de identificação e diagnóstico de leitura. Preserva notas, retenções, SEGEST, CSV, macro e formato PREVFGTS v4.
 // @match        https://exe.sigeo.jt.jus.br/*
 // @match        https://proad.trt3.jus.br/*
 // @match        file:///*
@@ -11939,6 +11939,171 @@ ${fonteReferencia}: ${referencia}`;
         desenhar();
     }
 
+
+    // ===================== v2.5.49: layouts da MFC (10/2026) =====================
+    // Regra comum: cada leitor novo só entra quando os leitores anteriores não reconhecem a página
+    // ou não leem nenhum registro. O que já é lido segue exatamente pelo mesmo caminho.
+    P.ehFolhaCodNomePrev = (t) => /Folha de Pagamento/i.test(t) && /(?:^|\n)\s*C[óo]d:\s*\d+\s+Nome:/i.test(t) && /Base INSS Funcion[áa]rio\s*:/i.test(t);
+    P.ehResumoFolhaCodNomePrev = (t) => /Folha de Pagamento/i.test(t) && /R\s*E\s*S\s*U\s*M\s*O\s+Local\s*:/i.test(t);
+    P.ehS5001DemonstrativoPrev = (t) => /DEMONSTRATIVO\s+eSOCIAL\s*[–-]\s*EVENTO\s+S-?5001/i.test(t) && /Trabalhador\s+CPF\s+Matr[íi]cula/i.test(t);
+    P.ehGfdOcrPrev = (t) => /Informa[çc][õo]es de recolhimentos do FGTS/i.test(t) && /Total da Guia\s*:/i.test(t) && /Pagar este documento at/i.test(t);
+    const tipoPaginaAnterior2549 = P.tipoPaginaPrev;
+    P.tipoPaginaPrev = (t) => {
+        const tipo = tipoPaginaAnterior2549(t);
+        if (tipo) return tipo;
+        if (P.ehFolhaCodNomePrev(t) || P.ehResumoFolhaCodNomePrev(t)) return 'folha';
+        if (P.ehGfdOcrPrev(t)) return 'fgts';
+        return '';
+    };
+
+    // Folha "Folha de Pagamento" (MFC): blocos "Cód: 214 Nome: ... Função: ...", sem CPF. A página
+    // "R E S U M O" é total coletivo e não entra nos empregados. Base e INSS somam salário e 13º
+    // (inclusive da rescisão), porque a conferência compara com o S-5001 somando mensal e 13º (11 + 11*, 21 + 21*).
+    P.lerFolhaCodNomePrev = (paginas) => {
+        const limpas = paginas.map(pg => String(pg || '').split('\n').filter(l => !/^\s*(?:Folha de Pagamento\s+\d{2}\/\d{2}\/\d{4}|Apelido\s*:|CNPJ\/CEI\s*:|Endere[çc]o\s*:)/i.test(l)).join('\n'));
+        const textoTodo = paginas.join('\n');
+        const corte = limpas.join('\n').split(/R\s*E\s*S\s*U\s*M\s*O\s+Local\s*:/i)[0];
+        const r = { competencia: '', colaboradores: [], avisos: [], informacoes: [], paginasIgnoradas: 0, totalImpresso: null, layout: 'Folha de Pagamento (Cód/Nome)' };
+        const per = textoTodo.match(/Per[íi]odo de\s*:\s*\d{2}\/(\d{2})\/(\d{4})/i);
+        r.competencia = per ? `${per[2]}-${per[1]}` : '';
+        const tot = textoTodo.match(/Total de Funcion[áa]rios\s*:\s*(\d+)/i); if (tot) r.totalImpresso = Number(tot[1]);
+        const V = '(' + PREV_VALOR + ')';
+        let local = '';
+        for (const bloco of corte.split(/(?=^\s*(?:Local\s*:|C[óo]d:\s*\d+\s+Nome:))/mi)) {
+            const ml = bloco.match(/^\s*Local\s*:\s*([^\n]+)/i);
+            if (ml) { local = ml[1].trim(); continue; }
+            const m = bloco.match(/^\s*C[óo]d:\s*(\d+)\s+Nome:\s*(.+?)\s+Fun[çc][ãa]o:/i);
+            if (!m) continue;
+            const c = P.novoColabPrev(m[1], m[2]);
+            c.admissao = bloco.match(/Admiss[ãa]o\s*:\s*(\d{2}\/\d{2}\/\d{4})/i)?.[1] || '';
+            c.situacao = (bloco.match(/Situa[çc][ãa]o\s*:\s*(.+?)(?=\s+(?:Data|Ocorr[êe]ncia|Sal[áa]rio)\s*:|\n|$)/i)?.[1] || '').trim();
+            const dataSit = bloco.match(/Situa[çc][ãa]o\s*:[^\n]*?\bData\s*:\s*(\d{2}\/\d{2}\/\d{4})/i)?.[1];
+            if (dataSit) c.situacao += ` (${dataSit})`;
+            c.ccusto = local;
+            const bi = P.ce(bloco.match(new RegExp('Base INSS Funcion[áa]rio\\s*:\\s*' + V, 'i'))?.[1]);
+            const bi13 = P.ce(bloco.match(new RegExp('Base INSS Func\\.\\s*13o\\.\\s*Sal[áa]rio\\s*:\\s*' + V, 'i'))?.[1]);
+            c.baseInss = bi === null || bi === undefined ? null : bi + (bi13 || 0);
+            const bf = P.ce(bloco.match(new RegExp('Base F\\.G\\.T\\.S\\.\\s*:\\s*' + V, 'i'))?.[1]);
+            const bf13 = P.ce(bloco.match(new RegExp('Base F\\.G\\.T\\.S\\.\\s*13o\\.\\s*:\\s*' + V, 'i'))?.[1]);
+            c.baseFgts = bf === null || bf === undefined ? null : bf + (bf13 || 0); // o F.G.T.S. impresso inclui o do 13º
+            const f = bloco.match(new RegExp('(?:^|[^e]\\s)F\\.G\\.T\\.S\\.\\s*:\\s*' + V, 'im'));
+            if (f) { c.fgts = P.ce(f[1]); c.temFgts = true; }
+            c.rubricasInss = [];
+            for (const mi of bloco.matchAll(new RegExp('(?:^|\\s)(\\d+)\\s+(INSS Sobre (?:Sal[áa]rio|13º Sal\\.?)(?:\\s*\\(Rescis[ãa]o\\))?)\\s+(?:\\d{1,3},\\d{2}\\s+)?' + V + '(?=\\s|$)', 'gi'))) {
+                const valor = P.ce(mi[3]); c.inss += valor; c.temInss = true;
+                c.rubricasInss.push({ codigo: mi[1], texto: mi[0].trim(), natureza: 'D', valor });
+            }
+            if (c.baseInss === 0 && !c.temInss) c.temInss = true;
+            r.colaboradores.push(c);
+        }
+        if (r.colaboradores.length) r.informacoes.push('Folha sem CPF: cada empregado é ligado pelo nome (e pela matrícula, quando o outro documento a traz).');
+        return P.finalizaFolhaPrev(r, textoTodo);
+    };
+    const lerFolhaAnterior2549 = P.lerFolha;
+    P.lerFolha = (paginas) => {
+        const anterior = lerFolhaAnterior2549(paginas);
+        if (anterior?.colaboradores?.length || !P.ehFolhaCodNomePrev(paginas.join('\n'))) return anterior;
+        const r = P.lerFolhaCodNomePrev(paginas);
+        if (!r.colaboradores.length) return anterior;
+        r.paginasIgnoradas = paginas.filter(pg => P.ehResumoFolhaCodNomePrev(pg) && !P.ehFolhaCodNomePrev(pg)).length;
+        return P.anotarFontesRegistrosPrev(r, paginas);
+    };
+
+    // "Demonstrativo eSocial – Evento S-5001" (gerado do XML do S-5001), um trabalhador por bloco,
+    // que pode continuar na página seguinte. Usa só o quadro infoBaseCS (por categoria); o quadro
+    // "por período de referência" repete os mesmos valores. Códigos 11, 19 e 21; 13º salário em 11*/21*.
+    P.lerS5001DemonstrativoPrev = (paginas) => {
+        const texto = paginas.join('\n');
+        const r = P.novoS5Prev(texto, 'S-5001 (demonstrativo por trabalhador)');
+        r.cnpj ||= P.dig(texto.match(/\b(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})\b/)?.[1]);
+        const meses = { JANEIRO: '01', FEVEREIRO: '02', MARCO: '03', ABRIL: '04', MAIO: '05', JUNHO: '06', JULHO: '07', AGOSTO: '08', SETEMBRO: '09', OUTUBRO: '10', NOVEMBRO: '11', DEZEMBRO: '12' };
+        const mp = texto.match(/Per[íi]odo de apura[çc][ãa]o[^\n]*\n[^\n]*?\b([A-Za-zçÇ]+)\/(\d{4})\b/i);
+        if (mp && meses[P.nome(mp[1])]) r.competencia = `${mp[2]}-${meses[P.nome(mp[1])]}`;
+        const V = '(' + PREV_VALOR + ')';
+        const ignorados = new Set();
+        for (const bloco of texto.split(/(?=DEMONSTRATIVO\s+eSOCIAL\s*[–-]\s*EVENTO\s+S-?5001)/i).filter(b => /^DEMONSTRATIVO/i.test(b))) {
+            const id = bloco.match(/Trabalhador\s+CPF\s+Matr[íi]cula\s*\n\s*(.+?)\s+(\d{3}\.\d{3}\.\d{3}-\d{2})\s+(\S+)\s*(?:\n|$)/i);
+            const cpf = P.cpf(id?.[2]);
+            if (!id || !cpf || !P.cpfValidoPrev(cpf)) { r.avisos.push('S-5001 (demonstrativo): bloco sem CPF legível; não associado a trabalhador.'); continue; }
+            const t = P.registroS5Prev({ cpf, nome: id[1].trim(), matEsocial: id[3], categoria: bloco.match(/\n\s*(\d{3})\s*[–-]\s*Empregado/i)?.[1] || '', _semBase: true, _semDesconto: true });
+            const quadro = (bloco.split(/BASES DE C[ÁA]LCULO E VALORES POR CATEGORIA/i)[1] || '').split(/DETALHAMENTO POR PER[ÍI]ODO/i)[0]
+                .replace(/^[^\n]*Tipo de valor \(tpValor\)[^\n]*\n/i, '');
+            for (const u of quadro.split(/(?=(?:^|\n)\s*(?:Compet[êe]ncia|D[ée]cimo terceiro)(?=\s|$))/i)) {
+                const mc = u.match(/(?:^|\s)(\d{2})\s*[–-]\s/); const mv = u.match(new RegExp('R\\$\\s*' + V));
+                if (!mc || !mv) continue;
+                const decimo = /D[ée]cimo terceiro/i.test(u), cod = mc[1], v = P.ce(mv[1]);
+                if (!['11', '19', '21'].includes(cod)) { ignorados.add(cod); continue; }
+                if (decimo && cod === '19') { ignorados.add('19 (13º)'); continue; }
+                P._s5Soma(t, decimo ? `${cod}*` : cod, v);
+                if (!decimo) { if (cod === '21') t._semDesconto = false; else t._semBase = false; }
+            }
+            if (r.trabalhadores.has(cpf)) { r.avisos.push(`S-5001 (demonstrativo): CPF ${P.fmtCpf(cpf)} aparece mais de uma vez; vale o primeiro. Conferir.`); continue; }
+            r.trabalhadores.set(cpf, t);
+            if (t._semBase) r.avisos.push(`S-5001 (demonstrativo): ${t.nome} sem base de cálculo mensal (tipo 11); não tratada como zero.`);
+        }
+        r.informacoes.push(`Demonstrativo do S-5001 por trabalhador: ${r.trabalhadores.size} trabalhador(es) lidos.${ignorados.size ? ` Códigos não usados na conferência: ${[...ignorados].join(', ')}.` : ''}`);
+        return P.somaS5Prev(r);
+    };
+    const lerS5001Anterior2549 = P.lerS5001;
+    P.lerS5001 = (paginas) => {
+        const anterior = lerS5001Anterior2549(paginas);
+        if (anterior?.trabalhadores?.size || anterior?.auxiliares?.length || !P.ehS5001DemonstrativoPrev(paginas.join('\n'))) return anterior;
+        const r = P.lerS5001DemonstrativoPrev(paginas);
+        return r.trabalhadores.size ? r : anterior;
+    };
+
+    // GFD escaneada: o OCR estraga o título ("GFD - Guia do FGTS Digital") e às vezes um dígito do
+    // identificador ("01261111/2193296-1"). Só aceita a guia quando há um único detalhe de guia lido e
+    // conferem: raiz do empregador, competência, total da guia (FGTS + consignado) e o identificador
+    // (dígitos legíveis iguais; no máximo 2 caracteres ilegíveis; dígito verificador igual).
+    P.recuperarGfdOcrPrev = (r, paginas) => {
+        if (r.gfds?.length || !r.guias?.size) return;
+        const idx = paginas.map((pg, i) => i).filter(i => !/GFD\s*-\s*Guia do FGTS Digital/i.test(paginas[i]) && P.ehGfdOcrPrev(paginas[i]));
+        if (idx.length !== 1 || r.guias.size !== 1) return;
+        const i = idx[0], pg = P.rotulosFgtsPrev(String(paginas[i]));
+        const g = [...r.guias.values()][0];
+        const valor = P.ce(pg.match(/Total da Guia\s*:\s*((?:\d{1,3}(?:\.\d{3})+|\d+),\d{2})/i)?.[1]);
+        const competencia = P.compDe(pg.match(/^\s*(\d{2}\/\d{4})\s+\d+\s+[\d.,]+/m)?.[1]);
+        const raiz = P.dig(pg.match(/\b(\d{2}\.\d{3}\.\d{3})\b/)?.[1]);
+        const totalDetalhe = P.ce(r.textoTotalGuiaPrev?.get?.(g.numero));
+        const [num16, dv] = String(g.numero).split('-');
+        let idOk = false;
+        for (const m of pg.matchAll(/(?:^|[^\d])([\d\/|lIO]{16})\s*-\s*(\d)(?!\d)/g)) {
+            const tok = m[1]; if (!num16 || tok.length !== 16 || m[2] !== dv) continue;
+            let ruins = 0, ok = true;
+            for (let k = 0; k < 16; k++) { if (/\d/.test(tok[k])) { if (tok[k] !== num16[k]) { ok = false; break; } } else ruins++; }
+            if (ok && ruins <= 2) { idOk = true; break; }
+        }
+        const confere = idOk && raiz && raiz === g.empregadorRaiz && competencia && g.competencias?.has?.(competencia)
+            && valor !== null && valor !== undefined && totalDetalhe !== null && totalDetalhe !== undefined && valor === totalDetalhe;
+        if (!confere) { (r.avisos ||= []).push('Página com aparência de GFD lida por OCR, mas empregador, competência, total ou número da guia não conferem com o detalhe; GFD não reconhecida.'); return; }
+        const fonte = paginas.fontes?.[i] || { pagina: i + 1 };
+        const gfd = { identificador: g.numero, vencimento: g.vencimento || '', valor, competencia, empregadorRaiz: raiz, empregadorNome: g.empregadorNome || '',
+            valorFgts: P.totalLinhaFgtsPrev(pg, 'Total FGTS'), valorConsignado: /Total Consignado/i.test(pg) ? P.totalLinhaFgtsPrev(pg, 'Total Consignado') : null,
+            fontes: [{ ...fonte, metodo: fonte.metodo || 'ocr' }], viaOcr: true, reconhecidaPorOcr: true };
+        r.gfds.push(gfd);
+        (r.informacoes ||= []).push(`GFD ${g.numero} lida por OCR: o número da guia, a competência, o empregador e o total de R$ ${P.rs(valor)} conferem com o detalhe da guia; vencimento ${gfd.vencimento || '?'} tirado do detalhe.`);
+        if (gfd.valorFgts !== null && gfd.valorConsignado) r.informacoes.push(`GFD ${g.numero}: pagamento R$ ${P.rs(valor)} inclui FGTS R$ ${P.rs(gfd.valorFgts)} e consignado R$ ${P.rs(gfd.valorConsignado)}.`);
+    };
+    const lerFgtsAnterior2549 = P.lerFgts;
+    P.lerFgts = (paginas) => {
+        const r = lerFgtsAnterior2549(paginas);
+        try {
+            if (!r.gfds?.length && r.guias?.size === 1 && paginas.some(P.ehGfdOcrPrev)) {
+                r.textoTotalGuiaPrev = new Map();
+                for (const pg of paginas) {
+                    const t = P.rotulosFgtsPrev(String(pg));
+                    const num = t.match(/N[úu]mero da Guia:\s*([\d-]+)/)?.[1];
+                    const tot = t.match(/Total da Guia \(FGTS \+ Consignado\)\s*:\s*([\d.,]+)/i)?.[1] || t.match(/Total da Guia \(FGTS\)\s*:\s*([\d.,]+)/i)?.[1];
+                    if (num && tot && !r.textoTotalGuiaPrev.has(num)) r.textoTotalGuiaPrev.set(num, tot);
+                }
+                P.recuperarGfdOcrPrev(r, paginas);
+                delete r.textoTotalGuiaPrev;
+            }
+        } catch (e) { (r.avisos ||= []).push(`GFD lida por OCR não interpretada: ${e.message}`); }
+        return r;
+    };
+    // ===================== fim v2.5.49 =====================
 
     return { abrir, garantirBotao, detectarPdfLocal, P, EST, LOCAL };
 
